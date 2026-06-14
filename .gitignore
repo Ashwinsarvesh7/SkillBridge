@@ -49,3 +49,7 @@ uploads/
 # Environment
 .env
 .env.local
+
+# Maven build
+target/
+skillbridge-backend/target/
