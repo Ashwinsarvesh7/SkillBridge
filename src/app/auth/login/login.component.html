@@ -1,0 +1,39 @@
+<div class="auth-page">
+  <div class="auth-hero">
+    <mat-icon class="hero-icon">hub</mat-icon>
+    <h1>SkillBridge</h1>
+    <p>Exchange skills. Grow together.</p>
+  </div>
+  <mat-card class="auth-card">
+    <h2>Welcome back</h2>
+    <p class="subtitle">Sign in to continue your skill journey</p>
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" formControlName="email" />
+        <mat-icon matPrefix>email</mat-icon>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" formControlName="password" />
+        <mat-icon matPrefix>lock</mat-icon>
+      </mat-form-field>
+      @if (error()) {
+        <p class="error">{{ error() }}</p>
+      }
+      <button
+        type="submit"
+        mat-flat-button
+        color="primary"
+        class="full-width submit-btn"
+        [disabled]="loading()">
+        @if (loading()) {
+          <mat-spinner diameter="20" />
+        } @else {
+          Sign In
+        }
+      </button>
+    </form>
+    <p class="footer-link">Don't have an account? <a routerLink="/auth/register">Register</a></p>
+  </mat-card>
+</div>

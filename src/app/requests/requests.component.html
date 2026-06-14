@@ -1,0 +1,252 @@
+<div class="requests-container">
+  <header class="page-header">
+    <div>
+      <h1>Skill Exchanges</h1>
+      <p>Manage your exchange requests, active sessions, and completed exchanges</p>
+    </div>
+    <a mat-raised-button color="primary" routerLink="/search">
+      <mat-icon>add_circle</mat-icon>
+      New Exchange Request
+    </a>
+  </header>
+
+  <mat-tab-group class="requests-tabs">
+    <!-- Pending Requests Tab -->
+    <mat-tab label="Pending ({{ pending().length }})">
+      <ng-template mat-tab-label>
+        <mat-icon>schedule</mat-icon>
+        <span>Pending ({{ pending().length }})</span>
+      </ng-template>
+
+      @if (pending().length === 0) {
+        <app-empty-state
+          icon="📋"
+          title="No pending requests"
+          message="You don't have any pending exchange requests">
+          <a mat-raised-button color="primary" routerLink="/search">
+            <mat-icon>search</mat-icon>
+            Browse Skills
+          </a>
+        </app-empty-state>
+      } @else {
+        <div class="request-list">
+          @for (req of pending(); track req.id) {
+            <mat-card class="request-card" [class.received]="isReceiver(req)">
+              <div class="request-header">
+                <div class="request-badge" [ngClass]="isReceiver(req) ? 'incoming' : 'outgoing'">
+                  {{ isReceiver(req) ? 'Received' : 'Sent' }}
+                </div>
+                <div class="request-direction">
+                  {{ isReceiver(req) ? req.senderName : req.receiverName }} wants to exchange
+                </div>
+              </div>
+
+              <div class="exchange-breakdown">
+                <div class="skill-exchange">
+                  <div class="skill">
+                    <span class="label">Offering</span>
+                    <strong>{{ isReceiver(req) ? req.offeredSkillName : req.requestedSkillName }}</strong>
+                  </div>
+                  <mat-icon class="exchange-arrow">swap_horiz</mat-icon>
+                  <div class="skill">
+                    <span class="label">Requesting</span>
+                    <strong>{{ isReceiver(req) ? req.requestedSkillName : req.offeredSkillName }}</strong>
+                  </div>
+                </div>
+              </div>
+
+              @if (req.message) {
+                <div class="request-message">
+                  <mat-icon>message</mat-icon>
+                  <p>{{ req.message }}</p>
+                </div>
+              }
+
+              <div class="request-meta">
+                <span class="timestamp">{{ req.createdAt | date: 'short' }}</span>
+                <span class="user-link">From: {{ isReceiver(req) ? req.senderName : req.receiverName }}</span>
+              </div>
+
+              <div class="request-actions">
+                @if (isReceiver(req)) {
+                  <button mat-flat-button color="primary" (click)="respond(req.id, 'ACCEPTED')">
+                    <mat-icon>check</mat-icon>
+                    Accept Request
+                  </button>
+                  <button mat-stroked-button color="warn" (click)="respond(req.id, 'REJECTED')">
+                    <mat-icon>close</mat-icon>
+                    Reject
+                  </button>
+                } @else {
+                  <button mat-stroked-button color="warn" (click)="cancel(req.id)">
+                    <mat-icon>cancel</mat-icon>
+                    Cancel Request
+                  </button>
+                }
+              </div>
+            </mat-card>
+          }
+        </div>
+      }
+    </mat-tab>
+
+    <!-- Active Exchanges Tab -->
+    <mat-tab label="Active ({{ active().length }})">
+      <ng-template mat-tab-label>
+        <mat-icon>play_circle</mat-icon>
+        <span>Active ({{ active().length }})</span>
+      </ng-template>
+
+      @if (active().length === 0) {
+        <app-empty-state
+          icon="🚀"
+          title="No active exchanges"
+          message="Accept an exchange request to get started">
+        </app-empty-state>
+      } @else {
+        <div class="request-list">
+          @for (req of active(); track req.id) {
+            <mat-card class="request-card active">
+              <div class="request-header">
+                <div class="request-badge active-badge">Active</div>
+                <div class="request-direction">Exchange with {{ req.senderId === auth.currentUser()?.id ? req.receiverName : req.senderName }}</div>
+              </div>
+
+              <div class="exchange-breakdown">
+                <div class="skill-exchange">
+                  <div class="skill">
+                    <span class="label">You're teaching</span>
+                    <strong>{{ req.senderId === auth.currentUser()?.id ? req.offeredSkillName : req.requestedSkillName }}</strong>
+                  </div>
+                  <mat-icon class="exchange-arrow">swap_horiz</mat-icon>
+                  <div class="skill">
+                    <span class="label">You're learning</span>
+                    <strong>{{ req.senderId === auth.currentUser()?.id ? req.requestedSkillName : req.offeredSkillName }}</strong>
+                  </div>
+                </div>
+              </div>
+
+              <div class="request-meta">
+                <mat-chip size="small" color="accent">{{ req.status }}</mat-chip>
+                <span class="timestamp">Started {{ req.createdAt | date: 'short' }}</span>
+              </div>
+
+              <div class="request-actions">
+                @if (req.sessionRoom) {
+                  <button mat-raised-button color="accent" (click)="joinSession(req)">
+                    <mat-icon>videocam</mat-icon>
+                    Join Video Session
+                  </button>
+                }
+                <button mat-button color="primary" (click)="openChat(req)">
+                  <mat-icon>chat</mat-icon>
+                  Message
+                </button>
+                <button mat-flat-button color="primary" (click)="complete(req.id)">
+                  <mat-icon>check_circle</mat-icon>
+                  Mark Complete
+                </button>
+              </div>
+            </mat-card>
+          }
+        </div>
+      }
+    </mat-tab>
+
+    <!-- History Tab -->
+    <mat-tab label="History">
+      <ng-template mat-tab-label>
+        <mat-icon>history</mat-icon>
+        <span>History ({{ history().length }})</span>
+      </ng-template>
+
+      @if (history().length === 0) {
+        <app-empty-state
+          icon="📚"
+          title="No history yet"
+          message="Completed exchanges will appear here">
+        </app-empty-state>
+      } @else {
+        <div class="request-list">
+          @for (req of history(); track req.id) {
+            <mat-card class="request-card" [class]="req.status | lowercase">
+              <div class="request-header">
+                <div class="request-badge" [ngClass]="'status-' + (req.status | lowercase)">{{ req.status }}</div>
+                <div class="request-direction">Exchange with {{ req.senderId === auth.currentUser()?.id ? req.receiverName : req.senderName }}</div>
+              </div>
+
+              <div class="exchange-breakdown">
+                <div class="skill-exchange">
+                  <div class="skill">
+                    <strong>{{ req.offeredSkillName }}</strong>
+                    <span class="label">↔</span>
+                  </div>
+                  <div class="skill">
+                    <strong>{{ req.requestedSkillName }}</strong>
+                  </div>
+                </div>
+              </div>
+
+              <div class="request-actions">
+                @if (req.status === 'COMPLETED') {
+                  <button mat-stroked-button (click)="openReview(req)">
+                    <mat-icon>star</mat-icon>
+                    Leave a Review
+                  </button>
+                }
+                <button mat-button (click)="false">
+                  <mat-icon>info</mat-icon>
+                  View Details
+                </button>
+              </div>
+            </mat-card>
+          }
+        </div>
+      }
+    </mat-tab>
+  </mat-tab-group>
+
+  <!-- Review Modal -->
+  @if (reviewTarget()) {
+    <div class="modal-overlay" (click)="closeReview()">
+      <mat-card class="review-modal" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3>Leave a Review</h3>
+          <button mat-icon-button (click)="closeReview()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+
+        <form [formGroup]="reviewForm" (ngSubmit)="submitReview()" class="review-form">
+          <div class="rating-input">
+            <label>Rating</label>
+            <div class="star-picker">
+              @for (r of [1,2,3,4,5]; track r) {
+                <button
+                  type="button"
+                  class="star"
+                  [class.active]="getRating() >= r"
+                  (click)="reviewForm.patchValue({rating: r})">
+                  ⭐
+                </button>
+              }
+            </div>
+          </div>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Your Review (optional)</mat-label>
+            <textarea matInput formControlName="comment" rows="4" placeholder="Share your experience..."></textarea>
+          </mat-form-field>
+
+          <div class="modal-actions">
+            <button mat-button type="button" (click)="closeReview()">Cancel</button>
+            <button mat-flat-button color="primary" type="submit" [disabled]="reviewForm.invalid">
+              <mat-icon>send</mat-icon>
+              Submit Review
+            </button>
+          </div>
+        </form>
+      </mat-card>
+    </div>
+  }
+</div>

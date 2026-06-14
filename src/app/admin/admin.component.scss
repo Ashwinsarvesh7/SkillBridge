@@ -1,0 +1,264 @@
+/* Admin component - content displayed within main layout */
+
+  
+.inspector-header {
+  display: flex;
+    gap: 18px;
+      align-items: center;
+      }
+      
+.avatar-large {
+  width: 64px;
+    height: 64px;
+      border-radius: 50%;
+        background: #dbeafe;
+            display: grid;
+              place-items: center;
+                color: #1d4ed8;
+                    font-weight: 700;
+                      font-size: 24px;
+                      }
+                      
+.status-row {
+  display: flex;
+    gap: 10px;
+      flex-wrap: wrap;
+        margin-top: 12px;
+        }
+        
+.inspector-details {
+  display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      }
+      
+.inspector-details div {
+  padding: 16px;
+    background: #f8fafc;
+        border-radius: 14px;
+        }
+        
+.inspector-details span {
+  display: block;
+    color: #64748b;
+        font-size: 12px;
+          margin-bottom: 6px;
+          }
+          
+.inspector-details strong {
+  color: #0f172a;
+    }
+    
+.inspector-form {
+  display: grid;
+    gap: 16px;
+    }
+    
+.inspector-sections {
+  display: grid;
+    gap: 18px;
+    }
+    
+.section-block {
+  border: 1px solid #e2e8f0;
+    border-radius: 16px;
+      padding: 18px;
+        background: #ffffff;
+          }
+          
+.section-block h3 {
+  margin: 0 0 12px;
+    font-size: 15px;
+      color: #0f172a;
+        }
+        
+.skill-list {
+  display: flex;
+    flex-wrap: wrap;
+      gap: 10px;
+      }
+      
+.skill-pill {
+  padding: 8px 12px;
+    background: #eef2ff;
+        color: #1d4ed8;
+            border-radius: 999px;
+              font-size: 12px;
+              }
+              
+.report-row {
+  display: flex;
+    justify-content: space-between;
+      gap: 12px;
+        margin-bottom: 12px;
+        }
+        
+.report-row mat-chip {
+  height: 28px;
+  }
+  
+.disabled-chip {
+  background: #fee2e2 !important;
+      color: #b91c1c !important;
+        }
+        
+.reports-header,
+.audit-header {
+  display: flex;
+    justify-content: space-between;
+      align-items: flex-start;
+        gap: 16px;
+          margin-bottom: 20px;
+          }
+          
+.reports-grid {
+  display: grid;
+    gap: 18px;
+    }
+    
+.report-card {
+  border-radius: 18px;
+    padding: 22px;
+      box-shadow: 0 22px 48px rgba(15, 23, 42, 0.06);
+        display: grid;
+          gap: 16px;
+          }
+          
+.report-card-header {
+  display: flex;
+    justify-content: space-between;
+      gap: 24px;
+        align-items: flex-start;
+        }
+        
+.report-card-header h3 {
+  margin: 0;
+  }
+  
+.report-card-header p {
+  margin: 6px 0 0;
+    color: #64748b;
+      }
+      
+.report-reason {
+  margin: 0;
+    color: #475569;
+        line-height: 1.6;
+        }
+        
+.report-actions {
+  display: flex;
+    gap: 10px;
+      flex-wrap: wrap;
+      }
+      
+.analytics-grid {
+  display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      }
+      
+.analytics-card {
+  padding: 20px;
+    border-radius: 18px;
+      background: #ffffff;
+          box-shadow: 0 22px 48px rgba(15, 23, 42, 0.06);
+          }
+          
+.metric-label {
+  margin: 0 0 6px;
+    color: #64748b;
+        text-transform: uppercase;
+          font-size: 11px;
+            letter-spacing: 0.08em;
+            }
+            
+.metric-value {
+  font-size: 32px;
+    font-weight: 700;
+      color: #0f172a;
+          margin: 0;
+          }
+          
+.metric-note {
+  margin-top: 10px;
+    color: #64748b;
+        font-size: 13px;
+        }
+        
+.analytics-charts {
+  display: grid;
+    gap: 18px;
+    }
+    
+.skill-breakdown {
+  display: grid;
+    gap: 12px;
+    }
+    
+.skill-row {
+  display: flex;
+    justify-content: space-between;
+      align-items: center;
+        background: #f8fafc;
+            padding: 14px 16px;
+              border-radius: 14px;
+              }
+              
+.skill-row span,
+.skill-row strong {
+  margin: 0;
+  }
+  
+.table-loading {
+  display: flex;
+    align-items: center;
+      justify-content: center;
+        min-height: 240px;
+        }
+        
+.audit-table th,
+.audit-table td {
+  padding: 16px;
+  }
+  
+.settings-view mat-card {
+  padding: 32px;
+  }
+  
+@media (max-width: 1200px) {
+  .admin-shell {
+      grid-template-columns: 1fr;
+        }
+        
+  .users-grid {
+      grid-template-columns: 1fr;
+        }
+        }
+        
+@media (max-width: 950px) {
+  .dashboard-cards,
+    .analytics-grid {
+        grid-template-columns: 1fr 1fr;
+          }
+          }
+          
+@media (max-width: 700px) {
+  .dashboard-cards,
+    .analytics-grid,
+      .dashboard-grid,
+        .search-group {
+            grid-template-columns: 1fr;
+              }
+              
+  .page-header {
+      flex-direction: column;
+          align-items: flex-start;
+            }
+            
+  .table-toolbar {
+      flex-direction: column;
+          align-items: stretch;
+            }
+            }
+            

@@ -1,0 +1,7 @@
+.reports-grid { display:grid; grid-template-columns: repeat(auto-fill,minmax(320px,1fr)); gap:12px; }
+.report-card { padding:12px; }
+.top { display:flex; justify-content:space-between; align-items:center; }
+.actions { display:flex; gap:8px; margin-top:8px; }
+.loading { display:flex; justify-content:center; padding:24px; }
+.toolbar { display:flex; gap:12px; align-items:center; margin-bottom:12px }
+.spacer { flex:1 }

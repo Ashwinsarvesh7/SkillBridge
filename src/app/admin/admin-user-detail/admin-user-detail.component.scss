@@ -1,0 +1,9 @@
+.user-detail-card { width: 760px; max-height: 80vh; overflow:auto; padding:12px; }
+.header { display:flex; gap:12px; align-items:center }
+.avatar { width:56px; height:56px; border-radius:8px; background:#1976d2; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700 }
+.meta { flex:1 }
+.muted { color: rgba(0,0,0,0.6) }
+.skills { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px }
+.skill { background:#f5f7fb; padding:6px 8px; border-radius:6px }
+.admin-controls { display:flex; gap:8px; margin-top:12px }
+.loading { display:flex; justify-content:center; padding:24px }

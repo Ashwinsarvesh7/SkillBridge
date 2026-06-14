@@ -1,0 +1,114 @@
+@if (loading()) {
+  <p>Loading profile...</p>
+} @else if (error()) {
+  <mat-card class="error-card">
+    <mat-icon>error</mat-icon>
+    <p>{{ error() }}</p>
+  </mat-card>
+} @else if (user(); as u) {
+  <div class="profile-page">
+    <header class="page-header">
+      <h1>My Profile</h1>
+      <mat-progress-bar mode="determinate" [value]="u.profileCompletionPercent" />
+      <span>{{ u.profileCompletionPercent }}% complete</span>
+    </header>
+
+    <div class="profile-grid">
+      <mat-card class="photo-card">
+        <div class="avatar" [style.backgroundImage]="u.profilePhotoUrl ? 'url(' + u.profilePhotoUrl + ')' : ''">
+          @if (!u.profilePhotoUrl) {
+            <mat-icon>person</mat-icon>
+          }
+        </div>
+        <input type="file" #photoInput hidden accept="image/*" (change)="onPhotoSelected($event)" />
+        <button mat-stroked-button (click)="photoInput.click()">Upload Photo</button>
+        <div class="rating">
+          <mat-icon>star</mat-icon>
+          {{ u.averageRating || 0 }} ({{ u.totalReviews || 0 }} reviews)
+        </div>
+      </mat-card>
+
+      <mat-card class="form-card">
+        <h3>Edit Profile</h3>
+        <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+          <div class="row">
+            <mat-form-field appearance="outline">
+              <mat-label>First Name</mat-label>
+              <input matInput formControlName="firstName" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Last Name</mat-label>
+              <input matInput formControlName="lastName" />
+            </mat-form-field>
+          </div>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Bio</mat-label>
+            <textarea matInput formControlName="bio" rows="4"></textarea>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Experience Level</mat-label>
+            <mat-select formControlName="experienceLevel">
+              @for (l of levels; track l) { <mat-option [value]="l">{{ l }}</mat-option> }
+            </mat-select>
+          </mat-form-field>
+          <button mat-flat-button color="primary" type="submit">Save Profile</button>
+        </form>
+      </mat-card>
+
+      <mat-card class="skills-card">
+        <h3>Skills I Teach</h3>
+        <div class="skill-chips">
+          @for (s of teachSkills(); track s.id) {
+            <mat-chip (removed)="removeSkill(s.id)">
+              {{ s.skillName }}
+              @if (s.badgeLevel !== 'NONE') {
+                <mat-icon>{{ badgeIcon(s.badgeLevel) }}</mat-icon>
+              }
+              <button matChipRemove><mat-icon>cancel</mat-icon></button>
+            </mat-chip>
+          }
+        </div>
+        <h3>Skills I Want to Learn</h3>
+        <div class="skill-chips">
+          @for (s of learnSkills(); track s.id) {
+            <mat-chip (removed)="removeSkill(s.id)">
+              {{ s.skillName }}
+              <button matChipRemove><mat-icon>cancel</mat-icon></button>
+            </mat-chip>
+          }
+        </div>
+        <form [formGroup]="newSkill" (ngSubmit)="addSkill()" class="add-skill">
+          <mat-form-field appearance="outline">
+            <mat-label>Skill</mat-label>
+            <mat-select formControlName="skillId">
+              @for (sk of allSkills(); track sk.id) {
+                <mat-option [value]="sk.id">{{ sk.name }} ({{ sk.category }})</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Type</mat-label>
+            <mat-select formControlName="skillType">
+              <mat-option value="TEACH">I Teach</mat-option>
+              <mat-option value="LEARN">I Want to Learn</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <button mat-flat-button color="accent" type="submit">Add Skill</button>
+        </form>
+      </mat-card>
+
+      <mat-card>
+        <h3>Reviews</h3>
+        @for (r of reviews(); track r.id) {
+          <div class="review-item">
+            <strong>{{ r.reviewerName }}</strong>
+            <span>{{ '★'.repeat(r.rating) }}</span>
+            <p>{{ r.comment }}</p>
+          </div>
+        } @empty {
+          <p class="empty">No reviews yet.</p>
+        }
+      </mat-card>
+    </div>
+  </div>
+}

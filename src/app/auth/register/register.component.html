@@ -1,0 +1,39 @@
+<div class="auth-page">
+  <mat-card class="auth-card">
+    <h2>Create Account</h2>
+    <p class="subtitle">Join SkillBridge and start exchanging skills</p>
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="row">
+        <mat-form-field appearance="outline">
+          <mat-label>First Name</mat-label>
+          <input matInput formControlName="firstName" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Last Name</mat-label>
+          <input matInput formControlName="lastName" />
+        </mat-form-field>
+      </div>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" formControlName="email" />
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" formControlName="password" />
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Experience Level</mat-label>
+        <mat-select formControlName="experienceLevel">
+          @for (l of levels; track l) {
+            <mat-option [value]="l">{{ l }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      @if (error()) { <p class="error">{{ error() }}</p> }
+      <button mat-flat-button color="primary" class="full-width submit-btn" [disabled]="loading() || form.invalid">
+        @if (loading()) { <mat-spinner diameter="20" /> } @else { Register }
+      </button>
+    </form>
+    <p class="footer-link">Already have an account? <a routerLink="/auth/login">Sign In</a></p>
+  </mat-card>
+</div>

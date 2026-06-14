@@ -1,0 +1,9 @@
+# Copy this file to application-local.properties and set your MySQL password
+# application-local.properties is loaded automatically by Spring Boot if it exists
+
+
+spring.datasource.username=root
+spring.datasource.password=Ashwin@1512
+spring.datasource.url=jdbc:mysql://localhost:3306/skillbridge_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+
+skillbridge.jwt.secret=SkillBridgeSecretKeyForJWTTokenGenerationMustBeAtLeast256BitsLong2024

@@ -1,0 +1,56 @@
+<div class="session-page">
+  <header class="page-header">
+    <h1>Make Session</h1>
+    <p>Open the link below and share it with your partner to start a session.</p>
+  </header>
+
+  <mat-card class="call-card">
+    <div class="call-top">
+      <div>
+        <h2>Room {{ roomId() }}</h2>
+        @if (contact()) {
+          <p>Invite <strong>{{ contact()?.firstName }} {{ contact()?.lastName }}</strong> to the call.</p>
+          @if (contact()?.email) { <p><mat-icon>email</mat-icon> {{ contact()?.email }}</p> }
+        } @else {
+          <p>Share this room link with your exchange partner.</p>
+        }
+      </div>
+      <button mat-stroked-button color="primary" type="button" (click)="copyRoomLink()">
+        <mat-icon>content_copy</mat-icon> Copy invite link
+      </button>
+    </div>
+
+    <div class="room-link">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Invite link</mat-label>
+        <input matInput [value]="roomLink()" readonly />
+      </mat-form-field>
+    </div>
+
+    <div class="videos">
+      <div class="video-box">
+        <h3>Your camera</h3>
+        <video #localVideo autoplay muted playsinline></video>
+      </div>
+      <div class="video-box remote-box">
+        <h3>Remote participant</h3>
+        <div class="remote-placeholder">
+          <mat-icon>videocam_off</mat-icon>
+          <p>Waiting for the other participant to join this room.</p>
+        </div>
+      </div>
+    </div>
+
+    @if (error()) {
+      <div class="error-banner">
+        <mat-icon>warning</mat-icon>
+        <span>{{ error() }}</span>
+      </div>
+    }
+
+    <div class="call-actions">
+      <button mat-flat-button color="warn" type="button" (click)="endCall()">End call</button>
+      <button mat-stroked-button color="primary" type="button" (click)="openChat()">Open chat</button>
+    </div>
+  </mat-card>
+</div>

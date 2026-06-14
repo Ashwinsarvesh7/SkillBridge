@@ -1,0 +1,97 @@
+<mat-card class="user-detail-card">
+  <div class="header">
+    <div class="avatar">{{ user?.firstName?.charAt(0) }}{{ user?.lastName?.charAt(0) }}</div>
+    <div class="meta">
+      <h2>{{ user?.firstName }} {{ user?.lastName }}</h2>
+      <p class="muted">{{ user?.email }}</p>
+    </div>
+    <div class="actions">
+      <button mat-icon-button (click)="close()"><mat-icon>close</mat-icon></button>
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  @if (!loading) {
+    <mat-tab-group>
+      <mat-tab label="Overview">
+        <div class="overview">
+          <p><strong>Account ID:</strong> {{ user?.accountId || '-' }}</p>
+          <p><strong>Phone:</strong> {{ user?.phone || '-' }}</p>
+          <p><strong>Status:</strong> <mat-chip>{{ user?.enabled ? 'Active' : 'Disabled' }}</mat-chip></p>
+          <p><strong>Joined:</strong> {{ user?.createdAt | date:'medium' }}</p>
+          <p><strong>Last login:</strong> {{ user?.lastLogin ? (user?.lastLogin | date:'short') : 'Never' }}</p>
+        </div>
+        <mat-divider></mat-divider>
+        <h4>Skills</h4>
+        <div class="skills">
+          @for (s of user?.skills || []; track s.id) {
+            <div class="skill">
+              <strong>{{ s.skillName }}</strong> <small class="muted">({{ s.skillType }})</small>
+            </div>
+          }
+          @if (!(user?.skills?.length)) {
+            <div>No skills listed</div>
+          }
+        </div>
+      </mat-tab>
+
+      <mat-tab label="Activity">
+        @if (logs.length === 0) {
+          <div>No login/activity history</div>
+        }
+        <mat-list>
+          @for (l of logs; track l.id) {
+            <mat-list-item>{{ l.createdAt | date:'short' }} — {{ l.activityType || l.description }}</mat-list-item>
+          }
+        </mat-list>
+      </mat-tab>
+
+      <mat-tab label="Sessions">
+        @if (exchanges.length === 0) {
+          <div>No sessions</div>
+        }
+        <mat-list>
+          @for (e of exchanges; track e.id) {
+            <mat-list-item>{{ e.createdAt | date:'short' }} — {{ e.senderName }} → {{ e.receiverName }} ({{ e.status }})</mat-list-item>
+          }
+        </mat-list>
+      </mat-tab>
+
+      <mat-tab label="Reports">
+        @if (reports.length === 0) {
+          <div>No reports</div>
+        }
+        <mat-list>
+          @for (r of reports; track r.id) {
+            <mat-list-item>{{ r.createdAt | date:'short' }} — {{ r.reason }} ({{ r.status }})</mat-list-item>
+          }
+        </mat-list>
+      </mat-tab>
+
+      <mat-tab label="Messages">
+        <p>Messages are not available in admin view yet.</p>
+      </mat-tab>
+
+      <mat-tab label="Connections">
+        <p>Connection requests not available in admin view yet.</p>
+      </mat-tab>
+    </mat-tab-group>
+
+    <div class="admin-controls">
+      @if (user && !user.enabled) {
+        <button mat-stroked-button color="primary" (click)="unblockUser()">Unblock</button>
+      }
+      @if (user && user.enabled && user.role !== 'ADMIN') {
+        <button mat-stroked-button color="warn" (click)="blockUser()">Block</button>
+      }
+      @if (user && user.role !== 'ADMIN') {
+        <button mat-flat-button color="warn" (click)="deleteUser()">Delete user</button>
+      }
+    </div>
+  }
+
+  @if (loading) {
+    <div class="loading"><mat-progress-spinner></mat-progress-spinner></div>
+  }
+</mat-card>

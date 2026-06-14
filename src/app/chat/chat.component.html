@@ -1,0 +1,89 @@
+<div class="chat-page">
+  <header class="page-header">
+    <div>
+      <h1>Messages</h1>
+      <p>Securely communicate with your exchange partners and keep all conversations centralized for better collaboration.</p>
+    </div>
+    <div class="header-actions">
+      <button mat-stroked-button color="primary" routerLink="/requests">
+        <mat-icon>swap_horiz</mat-icon>
+        View Exchanges
+      </button>
+    </div>
+  </header>
+
+  <div class="chat-layout">
+    <mat-card class="contacts-panel">
+      <div class="panel-header">
+        <h3>Contacts</h3>
+        <span class="badge">{{ contacts().length }}</span>
+      </div>
+      <mat-list>
+        @for (user of contacts(); track user.id) {
+          <mat-list-item (click)="selectContact(user)" [class.active]="selectedContact()?.id === user.id">
+            <div>
+              <div class="contact-name">{{ user.firstName }} {{ user.lastName }}</div>
+            </div>
+            <mat-icon>chevron_right</mat-icon>
+          </mat-list-item>
+        } @empty {
+          <div class="empty-state">
+            <mat-icon>people</mat-icon>
+            <p>No conversations found yet.</p>
+            <small>Accept an exchange or browse skills to start messaging.</small>
+          </div>
+        }
+      </mat-list>
+    </mat-card>
+
+    <mat-card class="chat-panel">
+      @if (selectedContact(); as contact) {
+        <div class="chat-header">
+          <div>
+            <div class="contact-title">{{ contact.firstName }} {{ contact.lastName }}</div>
+            <div class="contact-subtitle">Active exchange partner</div>
+          </div>
+          <button mat-stroked-button color="accent" type="button" (click)="startSession()">
+            <mat-icon>videocam</mat-icon>
+            {{ sessionRoom ? 'Join Session' : 'Start Session' }}
+          </button>
+        </div>
+
+        <div class="messages">
+          @if (messages().length === 0) {
+            <div class="empty-messages">
+              <mat-icon>forum</mat-icon>
+              <p>No conversation yet. Say hello to get started.</p>
+            </div>
+          } @else {
+            @for (msg of messages(); track msg.id) {
+              <div class="message" [class.mine]="isMine(msg)">
+                <div class="bubble">
+                  <span class="content">{{ msg.content }}</span>
+                  <span class="time">{{ msg.sentAt | date:'shortTime' }}</span>
+                </div>
+              </div>
+            }
+          }
+        </div>
+
+        <form [formGroup]="messageForm" (ngSubmit)="send()" class="message-input">
+          <mat-form-field appearance="outline" class="full-width">
+            <input matInput formControlName="content" placeholder="Type a message..." autocomplete="off" />
+          </mat-form-field>
+          <button mat-flat-button color="primary" type="submit" [disabled]="!messageForm.valid">
+            <mat-icon>send</mat-icon>
+          </button>
+        </form>
+      } @else {
+        <div class="no-chat">
+          <mat-icon>chat_bubble_outline</mat-icon>
+          <div>
+            <h2>Select a contact to open a conversation</h2>
+            <p>Use the left panel to access your exchange partners and start direct messaging.</p>
+          </div>
+        </div>
+      }
+    </mat-card>
+  </div>
+</div>

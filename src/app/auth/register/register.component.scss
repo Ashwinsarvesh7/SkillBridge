@@ -1,0 +1,7 @@
+@use '../login/login.component.scss';
+
+.row {
+  display: flex;
+  gap: 12px;
+  mat-form-field { flex: 1; }
+}

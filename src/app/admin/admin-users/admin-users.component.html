@@ -1,0 +1,112 @@
+<mat-card class="users-panel">
+  <div class="toolbar">
+    <mat-form-field appearance="outline" class="search">
+      <mat-label>Search users</mat-label>
+      <input matInput [(ngModel)]="search" (ngModelChange)="applyFilters()" placeholder="Name or email" />
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Role</mat-label>
+      <mat-select [(ngModel)]="roleFilter" (selectionChange)="applyFilters()">
+        <mat-option value="ALL">All</mat-option>
+        <mat-option value="USER">User</mat-option>
+        <mat-option value="ADMIN">Admin</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Status</mat-label>
+      <mat-select [(ngModel)]="statusFilter" (selectionChange)="applyFilters()">
+        <mat-option value="ALL">All</mat-option>
+        <mat-option value="ACTIVE">Active</mat-option>
+        <mat-option value="DISABLED">Disabled</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="spacer"></div>
+    <button mat-stroked-button color="primary" (click)="loadUsers()">Refresh</button>
+  </div>
+
+  @if (loading) {
+    <div class="loading"><mat-progress-spinner mode="indeterminate"></mat-progress-spinner></div>
+  }
+
+  @if (!loading) {
+    <div class="table-area">
+      <table class="full-width users-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Account ID</th>
+            <th>Status</th>
+            <th>Skills Known</th>
+            <th>Skills Wanted</th>
+            <th>Sessions</th>
+            <th>Last Login</th>
+            <th>Reports</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (u of paginated; track u.id) {
+            <tr class="user-row" (click)="viewUser(u)">
+              <td class="avatar-cell">
+                <div class="avatar">{{ u.firstName.charAt(0) }}{{ u.lastName.charAt(0) }}</div>
+              </td>
+              <td>{{ u.firstName }} {{ u.lastName }}</td>
+              <td>{{ u.email }}</td>
+              <td>{{ u.phone || '-' }}</td>
+              <td>{{ u.accountId || '-' }}</td>
+              <td>
+                <mat-chip [color]="u.enabled ? 'primary' : ''">
+                  {{ u.enabled ? 'Active' : 'Disabled' }}
+                </mat-chip>
+              </td>
+              <td>{{ (u.skills || []).filter(s => s.skillType === 'TEACH').length }}</td>
+              <td>{{ (u.skills || []).filter(s => s.skillType === 'LEARN').length }}</td>
+              <td>-</td>
+              <td>{{ u.lastLogin ? (u.lastLogin | date: 'short') : 'Never' }}</td>
+              <td>-</td>
+              <td class="actions-cell" (click)="$event.stopPropagation()">
+                <button mat-icon-button matTooltip="View" (click)="viewUser(u)">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+                @if (!u.enabled) {
+                  <button mat-icon-button matTooltip="Enable" (click)="enableUser(u)">
+                    <mat-icon>check_circle</mat-icon>
+                  </button>
+                }
+                @if (u.enabled && u.role !== 'ADMIN') {
+                  <button mat-icon-button matTooltip="Disable" (click)="disableUser(u)">
+                    <mat-icon>block</mat-icon>
+                  </button>
+                }
+                @if (u.role !== 'ADMIN') {
+                  <button mat-icon-button color="warn" matTooltip="Delete" (click)="deleteUser(u)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                }
+              </td>
+            </tr>
+          }
+          @empty {
+            <tr>
+              <td colspan="12" class="empty-state">No users found</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      <mat-paginator 
+        [length]="filtered.length" 
+        [pageSize]="pageSize" 
+        [pageSizeOptions]="[5, 10, 25, 50]" 
+        (page)="onPageChange($event)">
+      </mat-paginator>
+    </div>
+  }
+</mat-card>

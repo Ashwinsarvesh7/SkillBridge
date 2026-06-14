@@ -1,0 +1,41 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "SkillBridge: Backend",
+      "type": "shell",
+      "command": ".\\mvnw.cmd spring-boot:run",
+      "options": { "cwd": "${workspaceFolder}/skillbridge-backend" },
+      "isBackground": true,
+      "problemMatcher": {
+        "pattern": { "regexp": "^.*Started SkillBridgeApplication.*$" },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "^.*Starting.*$",
+          "endsPattern": "^.*Started SkillBridgeApplication.*$"
+        }
+      }
+    },
+    {
+      "label": "SkillBridge: Frontend",
+      "type": "shell",
+      "command": "npm start",
+      "options": { "cwd": "${workspaceFolder}" },
+      "isBackground": true,
+      "problemMatcher": {
+        "pattern": { "regexp": "^.*Local:.*4200.*$" },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "^.*Building.*$",
+          "endsPattern": "^.*Local:.*$"
+        }
+      }
+    },
+    {
+      "label": "SkillBridge: Run All",
+      "dependsOn": ["SkillBridge: Backend", "SkillBridge: Frontend"],
+      "dependsOrder": "parallel",
+      "problemMatcher": []
+    }
+  ]
+}

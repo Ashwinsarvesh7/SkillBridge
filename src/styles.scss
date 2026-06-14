@@ -1,0 +1,191 @@
+@use '@angular/material' as mat;
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+}
+
+:root {
+  --primary: #3f51b5;
+  --primary-light: #7986cb;
+  --accent: #ff4081;
+  --bg: #f5f7fa;
+  --surface: #ffffff;
+  --surface-variant: #f0f3f7;
+  --elevated: #ffffff;
+  --muted: #f7f7f7;
+  --text-primary: #212121;
+  --text-secondary: #757575;
+  --border: #e0e0e0;
+}
+
+body.dark-theme {
+  --primary: #7986cb;
+  --primary-light: #3f51b5;
+  --bg: #121212;
+  --surface: #181a1c;
+  --surface-variant: #1b1f23;
+  --elevated: #23272b;
+  --muted: #0f0f0f;
+  --text-primary: #ffffff;
+  --text-secondary: #b0b0b0;
+  --border: #333333;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text-primary);
+  transition: background 0.3s, color 0.3s;
+}
+
+mat-card {
+  background: var(--surface) !important;
+  color: var(--text-primary) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Dark-mode component adjustments for better contrast */
+body.dark-theme {
+  /* stronger card elevation in dark */
+  mat-card {
+    background: var(--elevated) !important;
+    background-image: linear-gradient(rgba(255,255,255,0.01), transparent) !important;
+    border: 1px solid rgba(255,255,255,0.03) !important;
+    box-shadow: 0 12px 30px rgba(2,6,23,0.72) !important;
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+  }
+
+  /* form fields */
+  .mat-form-field-appearance-fill .mat-form-field-flex {
+    background: rgba(255,255,255,0.02) !important;
+  }
+
+  input, textarea, .mat-input-element {
+    color: var(--text-primary) !important;
+    background: transparent !important;
+  }
+
+  /* lists and nav items fallback */
+  .mat-list-item, .mat-nav-list a, .mat-list-item .mat-line {
+    color: var(--text-primary) !important;
+  }
+
+  /* Make cards, panels and content surfaces stand out from background */
+  .content-card, .profile-card, .analytics-card, .report-card, .report-card-header,
+  .cards-grid .metric, .metric, .chart-card, .section-block, .inspector-details div,
+  .match-item, .exchange-item, .notification-item, .activity-item, .skeleton-card,
+  .stat-card, .card, .cards, .chart-card {
+    background: var(--elevated) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid rgba(255,255,255,0.03) !important;
+    box-shadow: 0 10px 30px rgba(2,6,23,0.7) !important;
+    background-image: linear-gradient(rgba(255,255,255,0.01), transparent) !important;
+  }
+
+  /* subtle inner highlight to make elevation readable */
+  .content-card::after, .profile-card::after, .analytics-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+  }
+
+  /* buttons and icon buttons */
+  button.mat-button, button.mat-icon-button {
+    color: var(--text-primary) !important;
+  }
+
+  /* topbar tweaks */
+  .topbar {
+    background: #121212;
+    color: var(--text-primary);
+  }
+
+  /* scrollbar for dark */
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.06); border-radius: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+.page-header p {
+  color: var(--text-secondary);
+  margin: 4px 0 0;
+}
+
+.empty {
+  color: var(--text-secondary);
+  font-style: italic;
+  padding: 16px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  &:hover { text-decoration: underline; }
+}
+
+/* Broad overrides to catch components that use hard-coded light styles */
+body.dark-theme {
+  /* common surface components */
+  .card, .cards, .metric, .metric-label, .metric-value, .chart-card, .chart, .analytics-card,
+  .report-card, .profile-card, .content-card, .match-item, .exchange-item, .notification-item,
+  .skeleton-card, .error-card, .section-block, .inspector-details div, .skill-row, .skill-pill,
+  .skill-breakdown, .notification-list, .activity-item, .avatar-large, .stat-card, .stat-card * {
+    background: var(--elevated) !important;
+    color: var(--text-primary) !important;
+    border-color: rgba(255,255,255,0.04) !important;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.45) !important;
+  }
+
+  /* specific small components */
+  .skill-pill, .skill-row, .exchange-item .skill-badge.offer, .exchange-item .skill-badge.request {
+    background: rgba(255,255,255,0.03) !important;
+    color: var(--text-primary) !important;
+  }
+
+  /* badges/chips */
+  .completed-badge, mat-chip, .disabled-chip {
+    background: linear-gradient(135deg, #0fbc76, #0b9d5b) !important;
+    color: #fff !important;
+  }
+
+  /* text elements that might be dark in light mode */
+  .dashboard-container h1, .dashboard-header h1, .page-header h1, h1, h2, h3, h4, p, span, label {
+    color: var(--text-primary) !important;
+  }
+
+  /* forms & inputs */
+  input, textarea, .mat-form-field-appearance-outline .mat-form-field-outline, .mat-form-field-appearance-outline .mat-form-field-flex {
+    background: rgba(255,255,255,0.02) !important;
+    color: var(--text-primary) !important;
+    border-color: rgba(255,255,255,0.04) !important;
+  }
+
+  /* code blocks */
+  code { background: rgba(255,255,255,0.02) !important; color: var(--text-primary) !important; }
+
+  /* make sure icons and small accents remain visible */
+  mat-icon, .mat-icon, .notification-item .notification-icon mat-icon, .content-card h3 mat-icon {
+    color: var(--primary-light) !important;
+  }
+
+  /* ensure links/buttons stand out */
+  a, button, .view-btn {
+    color: var(--primary-light) !important;
+  }
+}

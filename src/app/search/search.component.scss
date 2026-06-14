@@ -1,0 +1,31 @@
+.filter-card { padding: 20px !important; margin-bottom: 24px; }
+.filters { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-start; }
+.users-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+.user-card { padding: 20px !important; }
+.user-header { display: flex; gap: 12px; margin-bottom: 12px; }
+.avatar-sm {
+  width: 48px; height: 48px; border-radius: 50%;
+  background: var(--primary); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700;
+}
+.level { color: var(--text-secondary); font-size: 0.875rem; }
+.skills-section mat-chip { margin: 2px; }
+.rating { color: #f9a825; margin: 8px 0 12px; display: flex; align-items: center; gap: 4px; }
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+  display: flex; align-items: center; justify-content: center; z-index: 1000;
+}
+.request-modal { padding: 24px !important; max-width: 520px; width: 92%; position: relative; }
+.request-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.close-btn { color: rgba(0, 0, 0, 0.54); }
+.modal-skills { display: grid; gap: 12px; margin-bottom: 16px; }
+.skill-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.manual-exchange { display: grid; gap: 16px; }
+.actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px; }
+.contact-info { margin: 12px 0; color: rgba(0,0,0,0.7); }
+.contact-info mat-icon { font-size: 18px; vertical-align: middle; margin-right: 4px; }
+.user-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; }
+.modal-actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 12px 0; }
+.contact-meta { margin-bottom: 16px; }
+.full-width { width: 100%; }

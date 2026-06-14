@@ -1,0 +1,134 @@
+<div class="search-page">
+  <header class="page-header">
+    <h1>Find Skills</h1>
+    <p>Search users and start skill exchanges</p>
+  </header>
+
+  <mat-card class="filter-card">
+    <form [formGroup]="filterForm" class="filters" (ngSubmit)="search()">
+      <mat-form-field appearance="outline">
+        <mat-label>Skill</mat-label>
+        <input matInput formControlName="skill" placeholder="e.g. Java, Angular" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Category</mat-label>
+        <mat-select formControlName="category">
+          <mat-option value="">All</mat-option>
+          @for (c of categories(); track c) { <mat-option [value]="c">{{ c }}</mat-option> }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Experience</mat-label>
+        <mat-select formControlName="experienceLevel">
+          <mat-option value="">All</mat-option>
+          @for (l of levels; track l) { <mat-option [value]="l">{{ l }}</mat-option> }
+        </mat-select>
+      </mat-form-field>
+      <button mat-flat-button color="primary" type="submit"><mat-icon>search</mat-icon> Search</button>
+    </form>
+  </mat-card>
+
+  <div class="users-grid">
+    @for (user of users(); track user.id) {
+      <mat-card class="user-card">
+        <div class="user-header">
+          <div class="avatar-sm">{{ user.firstName[0] }}{{ user.lastName[0] }}</div>
+          <div>
+            <h3>{{ user.firstName }} {{ user.lastName }}</h3>
+            <span class="level">{{ user.experienceLevel }}</span>
+            @if (user.matchScore) {
+              <mat-chip color="primary">{{ user.matchScore }}% match</mat-chip>
+            }
+          </div>
+        </div>
+        <div class="skills-section">
+          <p><strong>Teaches:</strong>
+            @for (s of teachSkills(user); track s.id) {
+              <mat-chip>{{ s.skillName }}</mat-chip>
+            }
+          </p>
+          <p><strong>Wants:</strong>
+            @for (s of learnSkills(user); track s.id) {
+              <mat-chip>{{ s.skillName }}</mat-chip>
+            }
+          </p>
+        </div>
+        <div class="contact-info">
+          @if (user.email) { <span><mat-icon>email</mat-icon> {{ user.email }}</span> }
+        </div>
+        <div class="rating">
+          <mat-icon>star</mat-icon> {{ user.averageRating || 'New' }}
+        </div>
+        <div class="user-actions">
+          <button mat-stroked-button color="accent" (click)="goToChat(user)">Chat</button>
+          <button mat-stroked-button color="warn" (click)="startSession(user)">Make Session</button>
+          <button mat-flat-button color="primary" (click)="openRequest(user)">Send Exchange Request</button>
+        </div>
+      </mat-card>
+    } @empty {
+      <p class="empty">No users found. Try different filters.</p>
+    }
+  </div>
+
+  @if (selectedUser(); as target) {
+    <div class="modal-overlay" (click)="closeRequest()">
+      <mat-card class="request-modal" (click)="$event.stopPropagation()">
+        <div class="request-header">
+          <h3>Exchange with {{ target.firstName }}</h3>
+          <button mat-icon-button class="close-btn" type="button" aria-label="Close request dialog" (click)="closeRequest()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+
+        <div class="contact-meta">
+          <p><strong>Contact:</strong> {{ target.email || 'Not shared' }}</p>
+          <div class="modal-actions">
+            <button mat-stroked-button color="accent" type="button" (click)="goToChat(target)">Chat</button>
+            <button mat-stroked-button color="warn" type="button" (click)="startSession(target)">Make Session</button>
+          </div>
+        </div>
+
+        <p>Select skills to exchange:</p>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Message (optional)</mat-label>
+          <textarea matInput [ngModel]="requestMessage()" (ngModelChange)="requestMessage.set($event)" rows="2"></textarea>
+        </mat-form-field>
+
+        <div class="modal-skills">
+          <div>
+            <p><strong>Your teaching skills</strong></p>
+            <div class="skill-chips">
+              @for (s of teachSkills(currentUser()); track s.skillId) { <mat-chip>{{ s.skillName }}</mat-chip> }
+            </div>
+          </div>
+          <div>
+            <p><strong>{{ target.firstName }} wants to learn</strong></p>
+            <div class="skill-chips">
+              @for (s of learnSkills(target); track s.skillId) { <mat-chip>{{ s.skillName }}</mat-chip> }
+            </div>
+          </div>
+        </div>
+
+        <form class="manual-exchange" (ngSubmit)="sendManualRequest()">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Your offer</mat-label>
+            <mat-select [ngModel]="selectedOfferedSkillId()" (ngModelChange)="selectedOfferedSkillId.set($event)">
+              @for (s of teachSkills(currentUser()); track s.skillId) { <mat-option [value]="s.skillId">{{ s.skillName }}</mat-option> }
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Request from {{ target.firstName }}</mat-label>
+            <mat-select [ngModel]="selectedRequestedSkillId()" (ngModelChange)="selectedRequestedSkillId.set($event)">
+              @for (s of teachSkills(target); track s.skillId) { <mat-option [value]="s.skillId">{{ s.skillName }}</mat-option> }
+            </mat-select>
+          </mat-form-field>
+
+          <div class="actions">
+            <button mat-flat-button color="primary" type="submit">Send Request</button>
+            <button mat-button type="button" (click)="closeRequest()">Cancel</button>
+          </div>
+        </form>
+      </mat-card>
+    </div>
+  }
+</div>
