@@ -6,7 +6,7 @@
 
 # MySQL Local Development (used if spring.profiles.active=mysql or not specified)
 spring.datasource.username=root
-spring.datasource.password=YOUR_MYSQL_PASSWORD
+spring.datasource.password=Ashwin@1512
 spring.datasource.url=jdbc:mysql://localhost:3306/skillbridge_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
 
 # PostgreSQL (uncomment and configure if spring.profiles.active=postgres)
@@ -15,7 +15,7 @@ spring.datasource.url=jdbc:mysql://localhost:3306/skillbridge_db?createDatabaseI
 # spring.datasource.url=jdbc:postgresql://localhost:5432/skillbridge_db
 
 # JWT Configuration
-skillbridge.jwt.secret=SkillBridgeSecretKeyForJWTTokenGenerationMustBeAtLeast256BitsLong2024
+skillbridge.jwt.secret=SkillBridgeSecretKeyForJWTTokenGenerationMustBeAtLeast256BitsLong2026
 
 # Mail Configuration (optional)
 # skillbridge.mail.enabled=true
