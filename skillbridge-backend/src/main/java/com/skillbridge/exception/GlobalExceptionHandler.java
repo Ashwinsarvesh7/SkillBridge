@@ -61,11 +61,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ApiResponse<>(false, "Validation failed", errors));
     }
+@ExceptionHandler(Exception.class)
+public ResponseEntity<ApiResponse<String>> handleGeneral(Exception ex) {
+    log.error("Unhandled exception caught in GlobalExceptionHandler", ex);
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse<Void>> handleGeneral(Exception ex) {
-        log.error("Unhandled exception caught in GlobalExceptionHandler", ex);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ApiResponse.error("An unexpected error occurred. Please try again later."));
-    }
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body(new ApiResponse<>(false, ex.getMessage(), null));
+}
 }
