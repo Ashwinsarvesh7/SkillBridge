@@ -15,7 +15,13 @@ export class UserService {
   }
   removeSkill(id: number) { return this.api.delete<void>(`/users/me/skills/${id}`); }
   search(skill?: string, category?: string, experienceLevel?: ExperienceLevel) {
-    return this.api.get<User[]>('/users/search', { skill: skill || '', category: category || '', experienceLevel: experienceLevel || '' });
-  }
+  const params: any = {};
+
+  if (skill) params.skill = skill;
+  if (category) params.category = category;
+  if (experienceLevel) params.experienceLevel = experienceLevel;
+
+  return this.api.get<User[]>('/users/search', params);
+}
   getMatches() { return this.api.get<User[]>('/users/matches'); }
 }

@@ -49,15 +49,13 @@ public class UserService {
     @Transactional(readOnly = true)
 public UserDto getProfile(Long userId) {
     User user = findUser(userId);
-    user.getUserSkills().size();
     return DtoMapper.toUserDto(user);
 }
 
     public UserDto getUserById(Long id) {
-        User user = findUser(id);
-        user.getUserSkills().size();
-        return DtoMapper.toUserDto(user);
-    }
+    User user = findUser(id);
+    return DtoMapper.toUserDto(user);
+}
 
     @Transactional
     public UserDto updateProfile(Long userId, ProfileUpdateRequest request) {
@@ -110,27 +108,32 @@ public UserDto getProfile(Long userId) {
     }
 
     @Transactional
-    public void removeSkill(Long userId, Long userSkillId) {
-        UserSkill us = userSkillRepository.findById(userSkillId)
-                .orElseThrow(() -> new ResourceNotFoundException("User skill not found"));
-        if (!us.getUser().getId().equals(userId)) {
-            throw new BadRequestException("Not authorized");
-        }
-        userSkillRepository.delete(us);
-        User user = findUser(userId);
-        user.setProfileCompletionPercent(calculateCompletion(user));
-        userRepository.save(user);
+public void removeSkill(Long userId, Long userSkillId) {
+    UserSkill us = userSkillRepository.findById(userSkillId)
+            .orElseThrow(() -> new ResourceNotFoundException("User skill not found"));
+    if (!us.getUser().getId().equals(userId)) {
+        throw new BadRequestException("Not authorized");
     }
+    userSkillRepository.delete(us);
+    User user = findUser(userId);
+    user.setProfileCompletionPercent(calculateCompletion(user));
+    userRepository.save(user);
+}
 
-    public List<UserDto> searchUsers(Long currentUserId, String skill, String category, ExperienceLevel level) {
-        return userRepository.searchUsers(currentUserId, skill, category, level)
-                .stream().map(u -> {
-                    u.getUserSkills().size();
-                    return DtoMapper.toUserDto(u);
-                }).toList();
-    }
+public List<UserDto> searchUsers(Long currentUserId, String skill, String category, ExperienceLevel level) {
 
-    private int calculateCompletion(User user) {
+    System.out.println("===== SEARCH DEBUG =====");
+    System.out.println("skill = [" + skill + "]");
+    System.out.println("category = [" + category + "]");
+    System.out.println("level = [" + level + "]");
+
+    return userRepository.searchUsers(currentUserId, skill, category, level)
+            .stream()
+            .map(DtoMapper::toUserDto)
+            .toList();
+}
+
+private int calculateCompletion(User user) {
         int score = 20;
         if (user.getBio() != null && !user.getBio().isBlank()) score += 20;
         if (user.getProfilePhotoUrl() != null) score += 20;

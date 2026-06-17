@@ -44,12 +44,10 @@ public class AdminService {
     }
 
     public List<UserDto> getAllUsers() {
-        return userRepository.findAll().stream()
-                .map(u -> {
-                    u.getUserSkills().size();
-                    return DtoMapper.toUserDto(u);
-                }).toList();
-    }
+    return userRepository.findAll().stream()
+            .map(DtoMapper::toUserDto)
+            .toList();
+}
 
     public UserDto getUserById(Long userId) {
         return userRepository.findById(userId)
