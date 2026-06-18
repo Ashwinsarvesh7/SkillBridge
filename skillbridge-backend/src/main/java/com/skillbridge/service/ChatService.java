@@ -44,7 +44,10 @@ public class ChatService {
         msg = chatRepository.save(msg);
 
         ChatMessageDto dto = DtoMapper.toChatDto(msg);
-        messagingTemplate.convertAndSendToUser(receiver.getEmail(), "/queue/messages", dto);
+messagingTemplate.convertAndSend(
+    "/topic/chat/" + receiver.getId(),
+    dto
+);
         notificationService.create(receiver, "New Message",
                 sender.getFirstName() + ": " + content.substring(0, Math.min(50, content.length())),
                 NotificationType.CHAT, "/chat");

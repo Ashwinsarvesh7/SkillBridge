@@ -25,10 +25,12 @@ export class ChatService {
   onConnect: () => {
     console.log('✅ WebSocket Connected');
 
-    this.client?.subscribe('/user/queue/messages', (msg: Message) => {
-      console.log('📩 Message Received:', msg.body);
-      this.incomingMessage.set(JSON.parse(msg.body));
-    });
+   const userId = this.auth.currentUser()?.id;
+
+this.client?.subscribe(`/topic/chat/${userId}`, (msg: Message) => {
+  console.log('📩 Message Received:', msg.body);
+  this.incomingMessage.set(JSON.parse(msg.body));
+});
   },
 
   onStompError: (frame) => {
