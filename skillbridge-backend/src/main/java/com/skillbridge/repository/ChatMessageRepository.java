@@ -11,11 +11,22 @@ import java.util.List;
 @Repository
 public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long> {
 
-    @Query("SELECT m FROM ChatMessage m WHERE " +
-           "(m.sender.id = :userId1 AND m.receiver.id = :userId2) OR " +
-           "(m.sender.id = :userId2 AND m.receiver.id = :userId1) " +
-           "ORDER BY m.sentAt ASC")
-    List<ChatMessage> findConversation(@Param("userId1") Long userId1, @Param("userId2") Long userId2);
+    @Query("""
+    SELECT m
+    FROM ChatMessage m
+    JOIN FETCH m.sender
+    JOIN FETCH m.receiver
+    LEFT JOIN FETCH m.exchangeRequest
+    WHERE
+    (m.sender.id = :userId1 AND m.receiver.id = :userId2)
+    OR
+    (m.sender.id = :userId2 AND m.receiver.id = :userId1)
+    ORDER BY m.sentAt ASC
+    """)
+    List<ChatMessage> findConversation(
+            @Param("userId1") Long userId1,
+            @Param("userId2") Long userId2
+    );
 
     long countByReceiverIdAndReadFalse(Long receiverId);
 }

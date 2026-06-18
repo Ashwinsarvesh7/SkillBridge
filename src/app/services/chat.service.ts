@@ -19,18 +19,28 @@ export class ChatService {
     if (!token || this.client?.connected) return;
 
     this.client = new Client({
-      webSocketFactory: () => new SockJS(environment.wsUrl) as WebSocket,
-      connectHeaders: { Authorization: `Bearer ${token}` },
-      onConnect: () => {
-        const email = this.auth.currentUser()?.email;
-        if (email) {
-          this.client?.subscribe(`/user/${email}/queue/messages`, (msg: Message) => {
-            this.incomingMessage.set(JSON.parse(msg.body));
-          });
-        }
-      },
-      reconnectDelay: 5000
+  webSocketFactory: () => new SockJS(environment.wsUrl) as WebSocket,
+  connectHeaders: { Authorization: `Bearer ${token}` },
+
+  onConnect: () => {
+    console.log('✅ WebSocket Connected');
+
+    this.client?.subscribe('/user/queue/messages', (msg: Message) => {
+      console.log('📩 Message Received:', msg.body);
+      this.incomingMessage.set(JSON.parse(msg.body));
     });
+  },
+
+  onStompError: (frame) => {
+    console.error('❌ STOMP Error:', frame);
+  },
+
+  onWebSocketError: (error) => {
+    console.error('❌ WebSocket Error:', error);
+  },
+
+  reconnectDelay: 5000
+});
     this.client.activate();
   }
 
