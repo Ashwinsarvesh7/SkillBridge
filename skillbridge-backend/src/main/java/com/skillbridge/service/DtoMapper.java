@@ -31,10 +31,15 @@ public final class DtoMapper {
         dto.setAverageRating(user.getAverageRating());
         dto.setTotalReviews(user.getTotalReviews());
         if (user.getUserSkills() != null) {
-            dto.setSkills(user.getUserSkills().stream().map(DtoMapper::toUserSkillDto).collect(Collectors.toList()));
-        } else {
-            dto.setSkills(new java.util.ArrayList<>());
-        }
+    dto.setSkills(
+        user.getUserSkills()
+            .stream()
+            .map(DtoMapper::toUserSkillDto)
+            .collect(Collectors.toList())
+    );
+} else {
+    dto.setSkills(new java.util.ArrayList<>());
+}
         return dto;
     }
 
