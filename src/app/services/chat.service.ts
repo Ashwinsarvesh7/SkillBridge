@@ -16,7 +16,11 @@ export class ChatService {
 
   connect(): void {
     const token = this.auth.getToken();
-    if (!token || this.client?.connected) return;
+    if (!token) return;
+
+if (this.client) {
+  return;
+}
 
     this.client = new Client({
   webSocketFactory: () => new SockJS(environment.wsUrl) as WebSocket,
