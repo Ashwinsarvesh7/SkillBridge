@@ -50,6 +50,7 @@ public List<UserDto> getAllUsers() {
             .toList();
 }
 
+    @Transactional(readOnly = true)
     public UserDto getUserById(Long userId) {
         return userRepository.findById(userId)
                 .map(DtoMapper::toUserDto)
