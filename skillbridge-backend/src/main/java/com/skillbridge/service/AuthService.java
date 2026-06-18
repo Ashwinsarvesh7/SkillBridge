@@ -55,15 +55,20 @@ public class AuthService {
         return buildAuthResponse(user);
     }
 
-    public AuthResponse login(AuthRequest request) {
-        Authentication auth = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        CustomUserDetails details = (CustomUserDetails) auth.getPrincipal();
-        User user = details.getUser();
-        user.setLastLogin(LocalDateTime.now());
-        userRepository.save(user);
-        return buildAuthResponse(user);
-    }
+   public AuthResponse login(AuthRequest request) {
+    authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                    request.getEmail(),
+                    request.getPassword()));
+
+    User user = userRepository.findWithSkillsByEmail(request.getEmail())
+            .orElseThrow(() -> new BadRequestException("User not found"));
+
+    user.setLastLogin(LocalDateTime.now());
+    userRepository.save(user);
+
+    return buildAuthResponse(user);
+}
 
     private AuthResponse buildAuthResponse(User user) {
         Map<String, Object> claims = new HashMap<>();

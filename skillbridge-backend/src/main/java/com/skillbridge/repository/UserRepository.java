@@ -22,6 +22,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 @EntityGraph(attributePaths = {"userSkills", "userSkills.skill"})
 Optional<User> findWithSkillsById(Long id);
     
+@EntityGraph(attributePaths = {"userSkills", "userSkills.skill"})
+Optional<User> findWithSkillsByEmail(String email);
+
+
     @Query("""
 SELECT DISTINCT u
 FROM User u
