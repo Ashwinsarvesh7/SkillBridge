@@ -43,7 +43,8 @@ public class AdminService {
         this.activityService = activityService;
     }
 
-    public List<UserDto> getAllUsers() {
+ @Transactional(readOnly = true)
+public List<UserDto> getAllUsers() {
     return userRepository.findAll().stream()
             .map(DtoMapper::toUserDto)
             .toList();
