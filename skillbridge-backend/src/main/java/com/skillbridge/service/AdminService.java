@@ -26,22 +26,27 @@ import java.util.Map;
 
 @Service
 public class AdminService {
-
+    private final ActivityLogRepository activityLogRepository;
     private final UserRepository userRepository;
     private final ReportRepository reportRepository;
     private final ExchangeRequestRepository exchangeRepository;
     private final SkillRepository skillRepository;
     private final ActivityService activityService;
 
-    public AdminService(UserRepository userRepository, ReportRepository reportRepository,
-                        ExchangeRequestRepository exchangeRepository, SkillRepository skillRepository,
-                        ActivityService activityService) {
-        this.userRepository = userRepository;
-        this.reportRepository = reportRepository;
-        this.exchangeRepository = exchangeRepository;
-        this.skillRepository = skillRepository;
-        this.activityService = activityService;
-    }
+    public AdminService(UserRepository userRepository,
+                    ReportRepository reportRepository,
+                    ExchangeRequestRepository exchangeRepository,
+                    SkillRepository skillRepository,
+                    ActivityService activityService,
+                    ActivityLogRepository activityLogRepository) {
+
+    this.userRepository = userRepository;
+    this.reportRepository = reportRepository;
+    this.exchangeRepository = exchangeRepository;
+    this.skillRepository = skillRepository;
+    this.activityService = activityService;
+    this.activityLogRepository = activityLogRepository;
+}
 
  @Transactional(readOnly = true)
 public List<UserDto> getAllUsers() {
@@ -61,7 +66,7 @@ public List<UserDto> getAllUsers() {
     public void disableUser(Long userId, String reason) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-        if ("ADMIN".equals(user.getRole())) {
+        if (user.getRole() == UserRole.ADMIN) {
             throw new IllegalArgumentException("Admin users cannot be disabled");
         }
         user.setEnabled(false);
@@ -85,15 +90,22 @@ public List<UserDto> getAllUsers() {
     }
 
     @Transactional
-    public void deleteUser(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-        if ("ADMIN".equals(user.getRole())) {
-            throw new IllegalArgumentException("Admin users cannot be deleted");
-        }
-        userRepository.delete(user);
-        activityService.log(findCurrentAdmin(), "USER_DELETED", "Deleted user " + user.getEmail());
+public void deleteUser(Long userId) {
+    User user = userRepository.findById(userId)
+            .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+    if (user.getRole() == UserRole.ADMIN) {
+        throw new IllegalArgumentException("Admin users cannot be deleted");
     }
+
+    activityLogRepository.deleteByUserId(userId);
+
+    userRepository.delete(user);
+
+    activityService.log(findCurrentAdmin(),
+            "USER_DELETED",
+            "Deleted user " + user.getEmail());
+}
 
     @Transactional
     public UserDto updateUser(Long userId, Map<String, Object> updates) {

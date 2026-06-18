@@ -7,11 +7,12 @@ import com.skillbridge.entity.enums.SkillType;
 import com.skillbridge.repository.UserRepository;
 import com.skillbridge.repository.UserSkillRepository;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional(readOnly = true)
 public class MatchingService {
 
     private final UserRepository userRepository;
@@ -38,10 +39,9 @@ public class MatchingService {
         List<Long> matchIds = userSkillRepository.findMatchingUserIds(userId, teachIds, learnIds);
         if (matchIds.isEmpty()) return List.of();
 
-        return userRepository.findAllById(matchIds).stream()
+        return userRepository.findByIdIn(matchIds).stream()
                 .filter(User::isEnabled)
                 .map(user -> {
-                    user.getUserSkills().size();
                     UserDto dto = DtoMapper.toUserDto(user);
                     dto.setMatchScore(calculateMatchScore(user, teachIds, learnIds));
                     return dto;

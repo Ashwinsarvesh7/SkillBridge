@@ -25,6 +25,8 @@ Optional<User> findWithSkillsById(Long id);
 @EntityGraph(attributePaths = {"userSkills", "userSkills.skill"})
 Optional<User> findWithSkillsByEmail(String email);
 
+@EntityGraph(attributePaths = {"userSkills", "userSkills.skill"})
+List<User> findByIdIn(List<Long> ids);
 
     @Query("""
 SELECT DISTINCT u
