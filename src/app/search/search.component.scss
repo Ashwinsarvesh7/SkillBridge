@@ -1,31 +1,768 @@
-.filter-card { padding: 20px !important; margin-bottom: 24px; }
-.filters { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-start; }
-.users-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
-.user-card { padding: 20px !important; }
-.user-header { display: flex; gap: 12px; margin-bottom: 12px; }
+.search-page {
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+/* ======================================
+   FILTER SECTION
+====================================== */
+
+.filter-card {
+  padding: 28px !important;
+  margin-bottom: 28px;
+
+  border-radius: 24px !important;
+
+  transition: .3s ease;
+}
+
+body:not(.dark-theme) .filter-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+
+  box-shadow:
+    0 10px 25px rgba(15,23,42,.06);
+}
+
+body.dark-theme .filter-card {
+  background: #111827;
+  border: 1px solid rgba(255,255,255,.06);
+
+  box-shadow:
+    0 20px 40px rgba(0,0,0,.30);
+}
+
+.filters {
+  display: grid;
+
+  grid-template-columns:
+    repeat(auto-fit, minmax(220px, 1fr));
+
+  gap: 18px;
+
+  align-items: start;
+}
+
+.filters button {
+  height: 56px;
+  border-radius: 14px !important;
+}
+
+/* ======================================
+   USER GRID
+====================================== */
+
+.users-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(auto-fill, minmax(360px, 1fr));
+
+  gap: 24px;
+}
+
+/* ======================================
+   USER CARD
+====================================== */
+
+.user-card {
+
+  border-radius: 24px !important;
+
+  padding: 24px !important;
+
+  transition: all .25s ease;
+
+  overflow: hidden;
+}
+
+body:not(.dark-theme) .user-card {
+
+  background: #ffffff;
+
+  border: 1px solid #e5e7eb;
+
+  box-shadow:
+    0 10px 25px rgba(15,23,42,.06);
+}
+
+body.dark-theme .user-card {
+
+  background: #111827;
+
+  border: 1px solid rgba(255,255,255,.06);
+
+  box-shadow:
+    0 20px 40px rgba(0,0,0,.35);
+}
+
+.user-card:hover {
+
+  transform: translateY(-5px);
+
+  box-shadow:
+    0 20px 40px rgba(99,102,241,.15);
+}
+
+/* ======================================
+   USER HEADER
+====================================== */
+
+.user-header {
+  display: flex;
+  align-items: center;
+
+  gap: 16px;
+
+  margin-bottom: 18px;
+}
+
 .avatar-sm {
-  width: 48px; height: 48px; border-radius: 50%;
-  background: var(--primary); color: #fff;
-  display: flex; align-items: center; justify-content: center;
+
+  width: 60px;
+  height: 60px;
+
+  border-radius: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 18px;
+  font-weight: 700;
+
+  color: white;
+
+  background:
+    linear-gradient(
+      135deg,
+      #6366f1,
+      #8b5cf6
+    );
+
+  box-shadow:
+    0 10px 24px rgba(99,102,241,.30);
+}
+
+.user-header h3 {
+  margin: 0 0 6px;
+  font-size: 1.1rem;
+}
+
+body.dark-theme .user-header h3 {
+  color: white;
+}
+
+.level {
+  display: inline-block;
+
+  padding: 4px 10px;
+
+  border-radius: 999px;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  background: rgba(99,102,241,.10);
+
+  color: #6366f1;
+}
+
+/* ======================================
+   SKILLS
+====================================== */
+
+.skills-section {
+  margin: 18px 0;
+}
+
+.skills-section p {
+  margin-bottom: 14px;
+}
+
+body.dark-theme .skills-section p {
+  color: #cbd5e1;
+}
+
+mat-chip {
+  margin: 4px !important;
+}
+
+/* ======================================
+   CONTACT
+====================================== */
+
+.contact-info {
+
+  margin: 16px 0;
+
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  color: var(--text-secondary);
+}
+
+.contact-info span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.contact-info mat-icon {
+  font-size: 18px;
+}
+
+/* ======================================
+   RATING
+====================================== */
+
+.rating {
+
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+
+  margin: 18px 0;
+
+  color: #f59e0b;
+
+  font-weight: 600;
+}
+
+/* ======================================
+   ACTIONS
+====================================== */
+
+.user-actions {
+
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 12px;
+
+  margin-top: 20px;
+}
+
+.user-actions button {
+
+  flex: 1;
+
+  min-width: 120px;
+
+  border-radius: 14px !important;
+
+  height: 46px;
+}
+
+/* ======================================
+   MODAL
+====================================== */
+/* =====================================
+   MODAL OVERLAY
+===================================== */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, .75);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+  z-index: 1000;
+}
+
+/* =====================================
+   MODAL
+===================================== */
+
+.request-modal {
+  width: 100%;
+  max-width: 720px;
+  max-height: 90vh;
+  overflow-y: auto;
+
+  padding: 32px !important;
+  border-radius: 28px !important;
+
+  background: var(--surface);
+
+  box-shadow:
+    0 24px 80px rgba(0,0,0,.25);
+}
+
+/* DARK */
+
+body.dark-theme .request-modal {
+  background: #1e293b;
+  color: #f8fafc;
+}
+
+/* =====================================
+   HEADER
+===================================== */
+
+.request-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 32px;
+  padding-bottom: 20px;
+
+  border-bottom: 1px solid var(--border);
+}
+
+.request-header h3 {
+  margin: 0;
+  font-size: 1.8rem;
   font-weight: 700;
 }
-.level { color: var(--text-secondary); font-size: 0.875rem; }
-.skills-section mat-chip { margin: 2px; }
-.rating { color: #f9a825; margin: 8px 0 12px; display: flex; align-items: center; gap: 4px; }
-.modal-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.5);
-  display: flex; align-items: center; justify-content: center; z-index: 1000;
+
+.close-btn {
+  border-radius: 50%;
 }
-.request-modal { padding: 24px !important; max-width: 520px; width: 92%; position: relative; }
-.request-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
-.close-btn { color: rgba(0, 0, 0, 0.54); }
-.modal-skills { display: grid; gap: 12px; margin-bottom: 16px; }
-.skill-chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.manual-exchange { display: grid; gap: 16px; }
-.actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px; }
-.contact-info { margin: 12px 0; color: rgba(0,0,0,0.7); }
-.contact-info mat-icon { font-size: 18px; vertical-align: middle; margin-right: 4px; }
-.user-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; }
-.modal-actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 12px 0; }
-.contact-meta { margin-bottom: 16px; }
-.full-width { width: 100%; }
+
+body.dark-theme .close-btn {
+  color: #f8fafc;
+}
+
+/* =====================================
+   CONTACT
+===================================== */
+
+.contact-meta {
+  margin-bottom: 28px;
+}
+
+.contact-meta p {
+  margin-bottom: 16px;
+  color: var(--text-secondary);
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* =====================================
+   MESSAGE
+===================================== */
+
+.full-width {
+  width: 100%;
+}
+
+.manual-exchange {
+  display: grid;
+  gap: 20px;
+}
+
+/* =====================================
+   SKILLS AREA
+===================================== */
+
+.modal-skills {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+
+  margin: 28px 0;
+}
+
+.modal-skills > div {
+  padding: 20px;
+  border-radius: 20px;
+  background: rgba(99,102,241,.05);
+}
+
+body.dark-theme .modal-skills > div {
+  background: rgba(255,255,255,.04);
+}
+
+.modal-skills p {
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-weight: 700;
+}
+
+.skill-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* =====================================
+   CHIP COLORS
+===================================== */
+
+.skill-chips mat-chip {
+  border-radius: 12px !important;
+}
+
+body.dark-theme .skill-chips mat-chip {
+  background: rgba(99,102,241,.15);
+  color: #c7d2fe;
+}
+
+/* =====================================
+   FOOTER ACTIONS
+===================================== */
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+
+  margin-top: 16px;
+  padding-top: 24px;
+
+  border-top: 1px solid var(--border);
+}
+
+.actions button {
+  min-width: 140px;
+  height: 48px;
+  border-radius: 14px !important;
+}
+
+/* =====================================
+   RESPONSIVE
+===================================== */
+
+@media (max-width: 768px) {
+
+  .request-modal {
+    padding: 24px !important;
+  }
+
+  .modal-skills {
+    grid-template-columns: 1fr;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .actions button {
+    width: 100%;
+  }
+}
+
+/* ======================================
+   EMPTY
+====================================== */
+
+.empty {
+
+  grid-column: 1 / -1;
+
+  text-align: center;
+
+  padding: 60px 20px;
+
+  border-radius: 24px;
+
+  background: rgba(99,102,241,.05);
+
+  color: var(--text-secondary);
+}
+
+/* ======================================
+   MOBILE
+====================================== */
+
+@media (max-width: 768px) {
+
+  .users-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .user-actions {
+    flex-direction: column;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+}
+
+.skills-section {
+  margin: 28px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.skill-group {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.skill-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.skill-title mat-icon {
+  width: 34px;
+  height: 34px;
+  font-size: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+}
+
+.skill-title.teach {
+  color: #8b5cf6;
+}
+
+.skill-title.teach mat-icon {
+  background: rgba(139,92,246,.15);
+}
+
+.skill-title.learn {
+  color: #22c55e;
+}
+
+.skill-title.learn mat-icon {
+  background: rgba(34,197,94,.15);
+}
+
+.chips-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Teach Chips */
+.teach-chip {
+  background: linear-gradient(
+    135deg,
+    rgba(139,92,246,.25),
+    rgba(99,102,241,.18)
+  ) !important;
+
+  color: #e9d5ff !important;
+
+  border: 1px solid rgba(139,92,246,.35);
+}
+
+.learn-chip {
+  background: linear-gradient(
+    135deg,
+    rgba(34,197,94,.22),
+    rgba(16,185,129,.18)
+  ) !important;
+
+  color: #bbf7d0 !important;
+
+  border: 1px solid rgba(34,197,94,.35);
+}
+
+.teach-chip,
+.learn-chip {
+
+  transition: all .25s ease;
+
+  cursor: default;
+}
+
+.teach-chip:hover,
+.learn-chip:hover {
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 10px 20px rgba(0,0,0,.15);
+}
+
+/* Fix black text inside chips */
+
+body.dark-theme .mat-mdc-chip {
+  color: #f8fafc !important;
+}
+
+body.dark-theme .mat-mdc-standard-chip {
+  color: #f8fafc !important;
+}
+
+.level {
+
+  display: inline-block;
+
+  margin-top: 8px;
+
+  padding: 6px 14px;
+
+  border-radius: 999px;
+
+  background:
+    rgba(99,102,241,.15);
+
+  color: #a5b4fc;
+
+  font-size: .8rem;
+
+  font-weight: 600;
+
+  text-transform: uppercase;
+}
+
+.skills-section {
+
+  border-top:
+    1px solid rgba(255,255,255,.06);
+
+  padding-top: 24px;
+}
+
+/* Force chip colors */
+
+::ng-deep .teach-chip.mdc-evolution-chip {
+  background: linear-gradient(
+    135deg,
+    rgba(139,92,246,.25),
+    rgba(99,102,241,.18)
+  ) !important;
+
+  border: 1px solid rgba(139,92,246,.35) !important;
+}
+
+::ng-deep .teach-chip .mdc-evolution-chip__text-label {
+  color: #e9d5ff !important;
+  font-weight: 600;
+}
+
+::ng-deep .learn-chip.mdc-evolution-chip {
+  background: linear-gradient(
+    135deg,
+    rgba(34,197,94,.22),
+    rgba(16,185,129,.18)
+  ) !important;
+
+  border: 1px solid rgba(34,197,94,.35) !important;
+}
+
+::ng-deep .learn-chip .mdc-evolution-chip__text-label {
+  color: #bbf7d0 !important;
+  font-weight: 600;
+}
+
+/* ====================================
+   SEARCH FILTER CARD
+==================================== */
+
+.filter-card {
+  padding: 28px !important;
+  border-radius: 24px;
+  margin-bottom: 32px;
+}
+
+.filters {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  gap: 20px;
+  align-items: start;
+}
+
+/* ====================================
+   MATERIAL FORM FIELDS
+==================================== */
+
+::ng-deep .filters .mat-mdc-form-field {
+  width: 100%;
+}
+
+::ng-deep .filters .mat-mdc-text-field-wrapper {
+  height: 64px !important;
+  border-radius: 16px !important;
+}
+
+/* DARK MODE */
+
+body.dark-theme ::ng-deep .filters .mat-mdc-text-field-wrapper {
+  background: #111827 !important;
+}
+
+body.dark-theme ::ng-deep .filters input,
+body.dark-theme ::ng-deep .filters .mat-mdc-select-value-text {
+  color: #f8fafc !important;
+}
+
+body.dark-theme ::ng-deep .filters .mdc-floating-label {
+  color: #94a3b8 !important;
+}
+
+body.dark-theme ::ng-deep .filters .mat-mdc-select-arrow {
+  color: #94a3b8 !important;
+}
+
+/* LIGHT MODE */
+
+body:not(.dark-theme) ::ng-deep .filters .mat-mdc-text-field-wrapper {
+  background: #ffffff !important;
+}
+
+body:not(.dark-theme) ::ng-deep .filters input,
+body:not(.dark-theme) ::ng-deep .filters .mat-mdc-select-value-text {
+  color: #111827 !important;
+}
+
+body:not(.dark-theme) ::ng-deep .filters .mdc-floating-label {
+  color: #64748b !important;
+}
+
+/* ====================================
+   SEARCH BUTTON
+==================================== */
+
+.filters button {
+  height: 64px;
+  border-radius: 16px !important;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0 32px;
+}
+
+/* ====================================
+   RESPONSIVE
+==================================== */
+
+@media (max-width: 1100px) {
+  .filters {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .filters {
+    grid-template-columns: 1fr;
+  }
+
+  .filters button {
+    width: 100%;
+  }
+}
+
+
+:host-context(body.dark-theme) .page-header h1 {
+  color: #f8fafc !important;
+}
+
+:host-context(body.dark-theme) .page-header p {
+  color: #94a3b8 !important;
+}

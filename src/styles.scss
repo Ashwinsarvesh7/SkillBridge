@@ -1,191 +1,370 @@
 @use '@angular/material' as mat;
 
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
   font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-}
-
-:root {
-  --primary: #3f51b5;
-  --primary-light: #7986cb;
-  --accent: #ff4081;
-  --bg: #f5f7fa;
-  --surface: #ffffff;
-  --surface-variant: #f0f3f7;
-  --elevated: #ffffff;
-  --muted: #f7f7f7;
-  --text-primary: #212121;
-  --text-secondary: #757575;
-  --border: #e0e0e0;
-}
-
-body.dark-theme {
-  --primary: #7986cb;
-  --primary-light: #3f51b5;
-  --bg: #121212;
-  --surface: #181a1c;
-  --surface-variant: #1b1f23;
-  --elevated: #23272b;
-  --muted: #0f0f0f;
-  --text-primary: #ffffff;
-  --text-secondary: #b0b0b0;
-  --border: #333333;
-}
-
-body {
-  background: var(--bg);
-  color: var(--text-primary);
-  transition: background 0.3s, color 0.3s;
-}
-
-mat-card {
-  background: var(--surface) !important;
-  color: var(--text-primary) !important;
-  border-radius: 12px !important;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08) !important;
-}
-
-/* Dark-mode component adjustments for better contrast */
-body.dark-theme {
-  /* stronger card elevation in dark */
-  mat-card {
-    background: var(--elevated) !important;
-    background-image: linear-gradient(rgba(255,255,255,0.01), transparent) !important;
-    border: 1px solid rgba(255,255,255,0.03) !important;
-    box-shadow: 0 12px 30px rgba(2,6,23,0.72) !important;
-    -webkit-backdrop-filter: blur(4px);
-    backdrop-filter: blur(4px);
-  }
-
-  /* form fields */
-  .mat-form-field-appearance-fill .mat-form-field-flex {
-    background: rgba(255,255,255,0.02) !important;
-  }
-
-  input, textarea, .mat-input-element {
-    color: var(--text-primary) !important;
-    background: transparent !important;
-  }
-
-  /* lists and nav items fallback */
-  .mat-list-item, .mat-nav-list a, .mat-list-item .mat-line {
-    color: var(--text-primary) !important;
-  }
-
-  /* Make cards, panels and content surfaces stand out from background */
-  .content-card, .profile-card, .analytics-card, .report-card, .report-card-header,
-  .cards-grid .metric, .metric, .chart-card, .section-block, .inspector-details div,
-  .match-item, .exchange-item, .notification-item, .activity-item, .skeleton-card,
-  .stat-card, .card, .cards, .chart-card {
-    background: var(--elevated) !important;
-    color: var(--text-primary) !important;
-    border: 1px solid rgba(255,255,255,0.03) !important;
-    box-shadow: 0 10px 30px rgba(2,6,23,0.7) !important;
-    background-image: linear-gradient(rgba(255,255,255,0.01), transparent) !important;
-  }
-
-  /* subtle inner highlight to make elevation readable */
-  .content-card::after, .profile-card::after, .analytics-card::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    border-radius: inherit;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
-  }
-
-  /* buttons and icon buttons */
-  button.mat-button, button.mat-icon-button {
-    color: var(--text-primary) !important;
-  }
-
-  /* topbar tweaks */
-  .topbar {
-    background: #121212;
-    color: var(--text-primary);
-  }
-
-  /* scrollbar for dark */
-  ::-webkit-scrollbar { width: 10px; height: 10px; }
-  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.06); border-radius: 8px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-}
-
-.page-header h1 {
-  margin: 0;
-  font-size: 1.75rem;
-  font-weight: 600;
-}
-
-.page-header p {
-  color: var(--text-secondary);
-  margin: 4px 0 0;
-}
-
-.empty {
-  color: var(--text-secondary);
-  font-style: italic;
-  padding: 16px;
 }
 
 * {
   box-sizing: border-box;
 }
 
+:root {
+  --primary: #6366f1;
+
+  --bg: #f8fafc;
+  --surface: #ffffff;
+
+  --text-primary: #111827;
+  --text-secondary: #64748b;
+
+  --border: #e5e7eb;
+}
+
+/* =====================
+   DARK THEME VARIABLES
+===================== */
+
+body.dark-theme {
+  --bg: #020617;
+
+  --surface: #111827;
+
+  --text-primary: #ffffff;
+  --text-secondary: #94a3b8;
+
+  --border: rgba(255,255,255,.08);
+}
+
+/* =====================
+   BODY
+===================== */
+
+body {
+
+  background: var(--bg);
+
+  color: var(--text-primary);
+
+  transition:
+    background .3s ease,
+    color .3s ease;
+}
+
+/* =====================
+   LIGHT MODE
+===================== */
+
+body:not(.dark-theme) {
+
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(99,102,241,.08),
+      transparent 35%
+    ),
+
+    radial-gradient(
+      circle at bottom right,
+      rgba(139,92,246,.08),
+      transparent 35%
+    ),
+
+    #f8fafc;
+}
+
+/* =====================
+   DARK MODE
+===================== */
+
+body.dark-theme {
+
+  background:
+
+    radial-gradient(
+      circle at top left,
+      rgba(99,102,241,.15),
+      transparent 30%
+    ),
+
+    radial-gradient(
+      circle at bottom right,
+      rgba(139,92,246,.12),
+      transparent 30%
+    ),
+
+    #020617;
+}
+
+/* =====================
+   GLOBAL CARD STYLE
+===================== */
+
+mat-card {
+
+  border-radius: 24px;
+
+  color: var(--text-primary);
+}
+
+/* =====================
+   LINKS
+===================== */
+
 a {
   color: var(--primary);
   text-decoration: none;
-  &:hover { text-decoration: underline; }
 }
 
-/* Broad overrides to catch components that use hard-coded light styles */
-body.dark-theme {
-  /* common surface components */
-  .card, .cards, .metric, .metric-label, .metric-value, .chart-card, .chart, .analytics-card,
-  .report-card, .profile-card, .content-card, .match-item, .exchange-item, .notification-item,
-  .skeleton-card, .error-card, .section-block, .inspector-details div, .skill-row, .skill-pill,
-  .skill-breakdown, .notification-list, .activity-item, .avatar-large, .stat-card, .stat-card * {
-    background: var(--elevated) !important;
-    color: var(--text-primary) !important;
-    border-color: rgba(255,255,255,0.04) !important;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.45) !important;
-  }
+a:hover {
+  text-decoration: underline;
+}
 
-  /* specific small components */
-  .skill-pill, .skill-row, .exchange-item .skill-badge.offer, .exchange-item .skill-badge.request {
-    background: rgba(255,255,255,0.03) !important;
-    color: var(--text-primary) !important;
-  }
+/* =====================
+   HEADERS
+===================== */
 
-  /* badges/chips */
-  .completed-badge, mat-chip, .disabled-chip {
-    background: linear-gradient(135deg, #0fbc76, #0b9d5b) !important;
-    color: #fff !important;
-  }
+.page-header h1 {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+}
 
-  /* text elements that might be dark in light mode */
-  .dashboard-container h1, .dashboard-header h1, .page-header h1, h1, h2, h3, h4, p, span, label {
-    color: var(--text-primary) !important;
-  }
+.page-header p {
+  margin-top: 6px;
+  color: var(--text-secondary);
+}
 
-  /* forms & inputs */
-  input, textarea, .mat-form-field-appearance-outline .mat-form-field-outline, .mat-form-field-appearance-outline .mat-form-field-flex {
-    background: rgba(255,255,255,0.02) !important;
-    color: var(--text-primary) !important;
-    border-color: rgba(255,255,255,0.04) !important;
-  }
+/* =====================
+   EMPTY STATES
+===================== */
 
-  /* code blocks */
-  code { background: rgba(255,255,255,0.02) !important; color: var(--text-primary) !important; }
+.empty {
+  color: var(--text-secondary);
+  font-style: italic;
+  padding: 16px;
+}
+/* ==================================
+   GLOBAL MATERIAL DARK THEME FIX
+================================== */
 
-  /* make sure icons and small accents remain visible */
-  mat-icon, .mat-icon, .notification-item .notification-icon mat-icon, .content-card h3 mat-icon {
-    color: var(--primary-light) !important;
-  }
+body.dark-theme .mat-mdc-card {
+  background: #1e293b !important;
+  color: #f8fafc !important;
+}
 
-  /* ensure links/buttons stand out */
-  a, button, .view-btn {
-    color: var(--primary-light) !important;
-  }
+body.dark-theme .mat-mdc-menu-panel {
+  background: #1e293b !important;
+}
+
+body.dark-theme .mat-mdc-menu-item {
+  color: #f8fafc !important;
+}
+
+body.dark-theme .mat-mdc-chip {
+  background: rgba(255,255,255,.08) !important;
+  color: #f8fafc !important;
+}
+
+body.dark-theme .mat-mdc-progress-bar {
+  --mdc-linear-progress-track-color:
+    rgba(255,255,255,.08);
+}
+
+/* FORCE MATERIAL TOOLBAR DARK MODE */
+
+body.dark-theme .mat-toolbar,
+body.dark-theme .mat-mdc-toolbar {
+
+  background: #111827 !important;
+
+  color: #f8fafc !important;
+}
+
+body.dark-theme .mat-mdc-list-item-title,
+body.dark-theme .mdc-list-item__primary-text {
+  color: #cbd5e1 !important;
+}
+
+body.dark-theme .mat-mdc-list-item.active .mdc-list-item__primary-text {
+  color: #6366f1 !important;
+}
+
+/* =====================================
+   SIDEBAR DARK MODE TEXT + ICON FIX
+===================================== */
+
+body.dark-theme .mdc-list-item__primary-text {
+  color: #cbd5e1 !important;
+}
+
+body.dark-theme .mat-mdc-list-item.active .mdc-list-item__primary-text {
+  color: #6366f1 !important;
+}
+
+/* ICONS */
+
+body.dark-theme .mat-mdc-list-item mat-icon,
+body.dark-theme .mat-mdc-list-item .mat-icon {
+  color: #cbd5e1 !important;
+}
+
+body.dark-theme .mat-mdc-list-item.active mat-icon,
+body.dark-theme .mat-mdc-list-item.active .mat-icon {
+  color: #6366f1 !important;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(99,102,241,.35);
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(99,102,241,.55);
+}
+
+/* =====================================
+   ANGULAR MATERIAL OVERLAY DARK MODE
+===================================== */
+
+body.dark-theme .cdk-overlay-pane .mat-mdc-select-panel,
+body.dark-theme .mat-mdc-autocomplete-panel,
+body.dark-theme .mat-mdc-menu-panel {
+
+  background: #1e293b !important;
+
+  color: #f8fafc !important;
+
+  border: 1px solid rgba(255,255,255,.06);
+}
+
+/* options */
+
+body.dark-theme .mat-mdc-option {
+
+  color: #f8fafc !important;
+}
+
+/* hover */
+
+body.dark-theme .mat-mdc-option:hover,
+body.dark-theme .mat-mdc-option.mdc-list-item--selected,
+body.dark-theme .mat-mdc-option.mat-mdc-option-active {
+
+  background: rgba(99,102,241,.15) !important;
+}
+
+/* selected check icon */
+
+body.dark-theme .mat-pseudo-checkbox,
+body.dark-theme .mat-mdc-option .mat-icon {
+
+  color: #6366f1 !important;
+}
+
+/* dropdown arrow */
+
+body.dark-theme .mat-mdc-select-arrow {
+
+  color: #f8fafc !important;
+}
+
+/* form field */
+
+body.dark-theme .mat-mdc-form-field {
+
+  color: #f8fafc !important;
+}
+
+/* input text */
+
+body.dark-theme .mdc-text-field__input {
+
+  color: #f8fafc !important;
+}
+
+/* floating label */
+
+body.dark-theme .mdc-floating-label {
+
+  color: #94a3b8 !important;
+}
+
+/* ===== TEACH CHIPS ===== */
+
+.teach-chip {
+  background: rgba(139, 92, 246, 0.18) !important;
+  border: 1px solid rgba(139, 92, 246, 0.45) !important;
+}
+
+.teach-chip .mdc-evolution-chip__text-label,
+.teach-chip .mat-mdc-chip-action-label {
+  color: #c4b5fd !important;
+  opacity: 1 !important;
+  font-weight: 600 !important;
+}
+
+/* ===== LEARN CHIPS ===== */
+
+.learn-chip {
+  background: rgba(34, 197, 94, 0.18) !important;
+  border: 1px solid rgba(34, 197, 94, 0.45) !important;
+}
+
+.learn-chip .mdc-evolution-chip__text-label,
+.learn-chip .mat-mdc-chip-action-label {
+  color: #86efac !important;
+  opacity: 1 !important;
+  font-weight: 600 !important;
+}
+
+/* LIGHT MODE CHIPS */
+
+body:not(.dark-theme) .teach-chip {
+  background: #ede9fe !important;
+  border: 1px solid #c4b5fd !important;
+}
+
+body:not(.dark-theme) .teach-chip .mdc-evolution-chip__text-label,
+body:not(.dark-theme) .teach-chip .mat-mdc-chip-action-label {
+  color: #7c3aed !important;
+  opacity: 1 !important;
+}
+
+body:not(.dark-theme) .learn-chip {
+  background: #dcfce7 !important;
+  border: 1px solid #86efac !important;
+}
+
+body:not(.dark-theme) .learn-chip .mdc-evolution-chip__text-label,
+body:not(.dark-theme) .learn-chip .mat-mdc-chip-action-label {
+  color: #16a34a !important;
+  opacity: 1 !important;
+}
+
+/* FORCE MATERIAL CHIP SURFACE */
+
+body:not(.dark-theme) .teach-chip.mat-mdc-chip,
+body:not(.dark-theme) .learn-chip.mat-mdc-chip {
+  --mdc-chip-elevated-container-color: transparent !important;
+}
+
+body.dark-theme .card-header .mat-mdc-button,
+body.dark-theme .card-header .mdc-button,
+body.dark-theme .card-header button {
+  color: #818cf8 !important;
+}
+
+body.dark-theme .card-header .mat-mdc-button:hover {
+  background: rgba(99, 102, 241, 0.1) !important;
 }

@@ -8,10 +8,15 @@
 } @else if (user(); as u) {
   <div class="profile-page">
     <header class="page-header">
-      <h1>My Profile</h1>
-      <mat-progress-bar mode="determinate" [value]="u.profileCompletionPercent" />
-      <span>{{ u.profileCompletionPercent }}% complete</span>
-    </header>
+  <h1 class="profile-title">My Profile</h1>
+
+  <mat-progress-bar
+      mode="determinate"
+      [value]="u.profileCompletionPercent">
+  </mat-progress-bar>
+
+  <span>{{ u.profileCompletionPercent }}% complete</span>
+</header>
 
     <div class="profile-grid">
       <mat-card class="photo-card">

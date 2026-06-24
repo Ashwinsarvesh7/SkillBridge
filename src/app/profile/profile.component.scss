@@ -1,121 +1,277 @@
+.profile-page {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 32px;
+}
+
+.page-header {
+  margin-bottom: 30px;
+}
+
+.page-header h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+.page-header span {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+/* HERO */
+
 .profile-grid {
   display: grid;
-  grid-template-columns: 280px 1fr;
-  gap: 20px;
+  grid-template-columns: 320px 1fr;
+  gap: 24px;
 }
 
 .photo-card {
+  padding: 32px !important;
   text-align: center;
-  padding: 24px !important;
-  background: var(--surface) !important;
+  border-radius: 24px !important;
 }
 
 .avatar {
-  width: 120px;
-  height: 120px;
+  width: 160px;
+  height: 160px;
   border-radius: 50%;
-  background: var(--primary-light);
+  margin: 0 auto 24px;
+
+  background: linear-gradient(
+    135deg,
+    #6366f1,
+    #8b5cf6
+  );
+
   background-size: cover;
   background-position: center;
-  margin: 0 auto 16px;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(0,0,0,0.08);
-  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
 
-  mat-icon { font-size: 60px; width: 60px; height: 60px; color: #fff; }
+  box-shadow: 0 20px 40px rgba(99,102,241,.3);
+}
+
+.avatar mat-icon {
+  color: white;
+  font-size: 70px;
+  width: 70px;
+  height: 70px;
+}
+
+.photo-card h2 {
+  margin: 0;
+  font-size: 1.8rem;
 }
 
 .rating {
+  margin: 18px 0;
   display: flex;
-  align-items: center;
   justify-content: center;
-  gap: 4px;
-  margin-top: 12px;
-  color: #f9a825;
+  gap: 6px;
+  color: #f59e0b;
+  font-size: 1.1rem;
 }
 
-.form-card, .skills-card { padding: 24px !important; }
-.row { display: flex; gap: 12px; mat-form-field { flex: 1; } }
-.full-width { width: 100%; }
-.skill-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
-.add-skill { display: flex; gap: 12px; align-items: flex-start; flex-wrap: wrap; margin-top: 16px; }
-.review-item { padding: 12px 0; border-bottom: 1px solid var(--border); }
+/* FORM */
+
+.form-card,
+.skills-card,
+.review-card {
+  padding: 28px !important;
+  border-radius: 24px !important;
+}
+
+.form-card h3,
+.skills-card h3,
+.review-card h3 {
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+}
+
+.row {
+  display: flex;
+  gap: 16px;
+}
+
+.row mat-form-field {
+  flex: 1;
+}
+
+.full-width {
+  width: 100%;
+}
+
+/* SKILLS */
+
+.skill-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.skill-chips mat-chip {
+  border-radius: 30px !important;
+  padding: 8px 10px !important;
+  font-weight: 600;
+}
+
+.skills-card h3:first-child {
+  color: #8b5cf6;
+}
+
+.skills-card h3:last-of-type {
+  color: #10b981;
+}
+
+.skills-card .skill-chips:first-of-type mat-chip {
+  background: rgba(139,92,246,.12);
+  color: #8b5cf6;
+}
+
+.skills-card .skill-chips:last-of-type mat-chip {
+  background: rgba(16,185,129,.12);
+  color: #10b981;
+}
+
+/* ADD SKILL */
+
+.add-skill {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+
+.add-skill mat-form-field {
+  flex: 1;
+  min-width: 220px;
+}
+
+/* REVIEWS */
+
+.review-item {
+  padding: 18px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.review-item strong {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
+.review-item span {
+  color: #f59e0b;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.review-item p {
+  color: var(--text-secondary);
+}
+
+.empty {
+  color: var(--text-secondary);
+}
+
+/* DARK MODE */
 
 body.dark-theme {
-  .profile-page { background: var(--bg); }
 
-  .profile-grid { grid-template-columns: 280px 1fr; }
+  .page-header h1,
+  .form-card h3,
+  .skills-card h3,
+  .review-card h3,
+  .photo-card h2 {
+    color: #f8fafc !important;
+  }
 
   .photo-card,
   .form-card,
   .skills-card,
-  .review-item,
-  .mat-card {
-    background: var(--elevated) !important;
-    color: var(--text-primary) !important;
-    border: 1px solid rgba(255,255,255,0.08) !important;
-    box-shadow: 0 14px 40px rgba(0,0,0,0.45) !important;
-  }
-
-  .photo-card {
-    border-radius: 18px;
-  }
-
-  .avatar {
-    background: rgba(255,255,255,0.06);
-    border-color: rgba(255,255,255,0.08);
-    box-shadow: 0 14px 40px rgba(0,0,0,0.35);
-  }
-
-  .page-header h1 {
-    color: var(--text-primary) !important;
-  }
-
-  .page-header mat-progress-bar {
-    background-color: rgba(255,255,255,0.05);
-  }
-
-  .profile-page span,
-  .profile-page .rating,
-  .profile-page .review-item strong,
-  .profile-page .review-item p,
-  .profile-page h3 {
-    color: var(--text-primary) !important;
-  }
-
-  .profile-page .rating {
-    color: #f9a825;
-  }
-
-  .profile-page p {
-    color: var(--text-secondary) !important;
-  }
-
-  .add-skill {
-    gap: 16px;
-  }
-
-  mat-form-field .mat-form-field-flex {
-    background: rgba(255,255,255,0.03) !important;
-  }
-
-  mat-form-field .mat-form-field-outline {
-    color: rgba(255,255,255,0.12) !important;
-  }
-
-  .skill-chips mat-chip {
-    background: rgba(255,255,255,0.05) !important;
-    color: var(--text-primary) !important;
-    border: 1px solid rgba(255,255,255,0.08) !important;
+  .review-card {
+    background: #1e293b !important;
+    border: 1px solid rgba(255,255,255,.06);
   }
 
   .review-item {
-    border-bottom: 1px solid rgba(255,255,255,0.08);
+    border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+
+  .review-item p,
+  .empty,
+  .page-header span {
+    color: #94a3b8 !important;
   }
 }
 
-@media (max-width: 900px) {
-  .profile-grid { grid-template-columns: 1fr; }
+/* MOBILE */
+
+@media (max-width: 992px) {
+
+  .profile-page {
+    padding: 20px;
+  }
+
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .row {
+    flex-direction: column;
+  }
+
+  .page-header h1 {
+    font-size: 2.2rem;
+  }
+
+}
+
+/* ===========================
+   DARK MODE FIX
+=========================== */
+
+body.dark-theme .profile-page h1,
+body.dark-theme .profile-page h2,
+body.dark-theme .profile-page h3 {
+  color: #f8fafc !important;
+}
+
+body.dark-theme .profile-page span,
+body.dark-theme .profile-page p {
+  color: #cbd5e1 !important;
+}
+
+body.dark-theme .profile-page .page-header h1 {
+  color: #ffffff !important;
+}
+
+body.dark-theme .profile-page .page-header span {
+  color: #94a3b8 !important;
+}
+
+body.dark-theme .photo-card button {
+  color: #f8fafc !important;
+}
+
+body.dark-theme .photo-card {
+  color: #f8fafc !important;
+}
+
+.profile-title {
+  color: var(--text-primary);
+}
+
+body.dark-theme .profile-title {
+  color: #ffffff !important;
+}
+
+body.dark-theme .mat-mdc-outlined-button {
+  color: #f8fafc !important;
+  border-color: rgba(255,255,255,0.15) !important;
 }

@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatMenuModule } from '@angular/material/menu';
 
 import { AuthService } from '../../services/auth.service';
 import { ThemeService } from '../../services/theme.service';
@@ -25,7 +26,8 @@ import { ChatService } from '../../services/chat.service';
     MatIconModule,
     MatButtonModule,
     MatBadgeModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatMenuModule
 ],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.scss'

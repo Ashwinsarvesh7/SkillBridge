@@ -1,8 +1,10 @@
 <div class="search-page">
   <header class="page-header">
+  <div>
     <h1>Find Skills</h1>
-    <p>Search users and start skill exchanges</p>
-  </header>
+    <p>Discover experts and start meaningful skill exchanges.</p>
+  </div>
+</header>
 
   <mat-card class="filter-card">
     <form [formGroup]="filterForm" class="filters" (ngSubmit)="search()">
@@ -42,17 +44,38 @@
           </div>
         </div>
         <div class="skills-section">
-          <p><strong>Teaches:</strong>
-            @for (s of teachSkills(user); track s.id) {
-              <mat-chip>{{ s.skillName }}</mat-chip>
-            }
-          </p>
-          <p><strong>Wants:</strong>
-            @for (s of learnSkills(user); track s.id) {
-              <mat-chip>{{ s.skillName }}</mat-chip>
-            }
-          </p>
-        </div>
+
+  <div class="skill-group">
+    <div class="skill-title teach">
+      <mat-icon>school</mat-icon>
+      <span>Teaches</span>
+    </div>
+
+    <div class="chips-row">
+      @for (s of teachSkills(user); track s.id) {
+        <mat-chip class="teach-chip">
+          {{ s.skillName }}
+        </mat-chip>
+      }
+    </div>
+  </div>
+
+  <div class="skill-group">
+    <div class="skill-title learn">
+      <mat-icon>menu_book</mat-icon>
+      <span>Wants to Learn</span>
+    </div>
+
+    <div class="chips-row">
+      @for (s of learnSkills(user); track s.id) {
+        <mat-chip class="learn-chip">
+          {{ s.skillName }}
+        </mat-chip>
+      }
+    </div>
+  </div>
+
+</div>
         <div class="contact-info">
           @if (user.email) { <span><mat-icon>email</mat-icon> {{ user.email }}</span> }
         </div>
