@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,6 +15,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
+
 import { AdminService } from '../../services/admin.service';
 import { User } from '../../models';
 
@@ -41,24 +43,38 @@ import { User } from '../../models';
   styleUrls: ['./admin-users.component.scss']
 })
 export class AdminUsersComponent implements OnInit {
+
   private adminService = inject(AdminService);
   private snackBar = inject(MatSnackBar);
   private dialog = inject(MatDialog);
 
   users: User[] = [];
   filtered: User[] = [];
+
   loading = true;
+
   search = '';
   roleFilter: 'ALL' | 'USER' | 'ADMIN' = 'ALL';
   statusFilter: 'ALL' | 'ACTIVE' | 'DISABLED' = 'ALL';
 
-  // Paginationn
   pageIndex = 0;
   pageSize = 10;
 
-  displayedColumns = ['profile', 'name', 'email', 'phone', 'accountId', 'status', 'skillsKnown', 'skillsWanted', 'sessions', 'lastLogin', 'reports', 'actions'];
+  displayedColumns = [
+    'profile',
+    'name',
+    'email',
+    'phone',
+    'accountId',
+    'status',
+    'skillsKnown',
+    'skillsWanted',
+    'sessions',
+    'lastLogin',
+    'reports',
+    'actions'
+  ];
 
-  // Selection / detail
   selectedUser: User | null = null;
   editing = false;
   draft: Partial<User> | null = null;
@@ -70,71 +86,179 @@ export class AdminUsersComponent implements OnInit {
 
   loadUsers(): void {
     this.loading = true;
-    this.adminService.getUsers().subscribe(u => {
-      this.users = u;
-      this.applyFilters();
-      this.loading = false;
-    }, () => this.loading = false);
+
+    this.adminService.getUsers().subscribe({
+      next: users => {
+        this.users = users;
+        this.applyFilters();
+        this.loading = false;
+      },
+      error: () => {
+        this.loading = false;
+      }
+    });
   }
 
   applyFilters(): void {
+
     const term = this.search.toLowerCase().trim();
-    this.filtered = this.users.filter(u => {
-      const matchesSearch = !term || `${u.firstName} ${u.lastName} ${u.email || ''}`.toLowerCase().includes(term);
-      const matchesRole = this.roleFilter === 'ALL' || u.role === this.roleFilter;
-      const status = u.enabled ? 'ACTIVE' : 'DISABLED';
-      const matchesStatus = this.statusFilter === 'ALL' || status === this.statusFilter;
-      return matchesSearch && matchesRole && matchesStatus;
+
+    this.filtered = this.users.filter(user => {
+
+      const matchesSearch =
+        !term ||
+        `${user.firstName} ${user.lastName} ${user.email || ''}`
+          .toLowerCase()
+          .includes(term);
+
+      const matchesRole =
+        this.roleFilter === 'ALL' ||
+        user.role === this.roleFilter;
+
+      const status = user.enabled ? 'ACTIVE' : 'DISABLED';
+
+      const matchesStatus =
+        this.statusFilter === 'ALL' ||
+        status === this.statusFilter;
+
+      return (
+        matchesSearch &&
+        matchesRole &&
+        matchesStatus
+      );
     });
-    // reset pagination when filters change
+
     this.pageIndex = 0;
   }
 
-  // computed paginated results
   get paginated(): User[] {
     const start = this.pageIndex * this.pageSize;
     return this.filtered.slice(start, start + this.pageSize);
   }
+toggleUserStatus(user: User): void {
 
-  enableUser(user: User): void {
-    this.adminService.enableUser(user.id).subscribe(() => {
-      this.snackBar.open('User enabled', 'Close', { duration: 2000 });
-      this.loadUsers();
-    });
-  }
+  if (user.enabled) {
 
-  disableUser(user: User): void {
-    if (user.role === 'ADMIN') {
-      this.snackBar.open('Admin users cannot be blocked.', 'Close', { duration: 3000 });
-      return;
-    }
-    this.adminService.disableUser(user.id, 'Disabled by admin').subscribe(() => {
-      this.snackBar.open('User disabled', 'Close', { duration: 2000 });
-      this.loadUsers();
+    this.adminService.disableUser(
+      user.id,
+      'Disabled by admin'
+    ).subscribe({
+
+      next: () => {
+
+        user.enabled = false;
+
+        this.snackBar.open(
+          'User blocked successfully',
+          'Close',
+          { duration: 3000 }
+        );
+
+        this.loadUsers();
+      },
+
+      error: (err) => {
+
+        console.log('Error:', err);
+
+        // Since backend already blocked user,
+        // reload users and don't show error
+
+        this.loadUsers();
+      }
+
     });
+
+  } else {
+
+    this.adminService.enableUser(user.id)
+      .subscribe({
+
+        next: () => {
+
+          user.enabled = true;
+
+          this.snackBar.open(
+            'User unblocked successfully',
+            'Close',
+            { duration: 3000 }
+          );
+
+          this.loadUsers();
+        },
+
+        error: (err) => {
+
+          console.log('Error:', err);
+
+          this.loadUsers();
+        }
+
+      });
   }
+}
 
   deleteUser(user: User): void {
+
     if (user.role === 'ADMIN') {
-      this.snackBar.open('Admin users cannot be deleted.', 'Close', { duration: 3000 });
+      this.snackBar.open(
+        'Admin users cannot be deleted.',
+        'Close',
+        { duration: 3000 }
+      );
       return;
     }
-    if (!confirm(`Delete ${user.firstName} ${user.lastName}?`)) return;
-    this.adminService.deleteUser(user.id).subscribe(() => {
-      this.snackBar.open('User deleted', 'Close', { duration: 2000 });
-      this.loadUsers();
-    }, error => {
-      console.error('Delete user failed', error);
-      this.snackBar.open(error?.message || 'Failed to delete user', 'Close', { duration: 4000 });
+
+    if (
+      !confirm(
+        `Delete ${user.firstName} ${user.lastName}?`
+      )
+    ) {
+      return;
+    }
+
+    this.adminService.deleteUser(user.id).subscribe({
+
+      next: () => {
+        this.snackBar.open(
+          'User deleted',
+          'Close',
+          { duration: 2000 }
+        );
+
+        this.loadUsers();
+      },
+
+      error: error => {
+        console.error(error);
+
+        this.snackBar.open(
+          error?.message || 'Failed to delete user',
+          'Close',
+          { duration: 4000 }
+        );
+      }
     });
   }
 
-  // Detail / actions
   viewUser(user: User): void {
-    // open detail dialog
-    import('../admin-user-detail/admin-user-detail.component').then(m => {
-      const dialogRef = this.dialog.open(m.AdminUserDetailComponent, { data: { userId: user.id } });
+
+    import(
+      '../admin-user-detail/admin-user-detail.component'
+    ).then(m => {
+
+      const dialogRef = this.dialog.open(
+        m.AdminUserDetailComponent,
+        {
+          width: '900px',
+          data: {
+            userId: user.id
+          }
+        }
+      );
+
       dialogRef.afterClosed().subscribe(result => {
+
         if (result?.deleted) {
           this.loadUsers();
         }
@@ -147,32 +271,63 @@ export class AdminUsersComponent implements OnInit {
   }
 
   cancelEdit(): void {
-    if (this.selectedUser) this.draft = { ...this.selectedUser };
+
+    if (this.selectedUser) {
+      this.draft = { ...this.selectedUser };
+    }
+
     this.editing = false;
   }
 
   saveUser(): void {
-    if (!this.draft || !this.selectedUser) return;
-    this.adminService.updateUser(this.selectedUser.id, this.draft as Partial<User>).subscribe(u => {
-      this.snackBar.open('User updated', 'Close', { duration: 2000 });
-      this.selectedUser = u;
-      this.draft = { ...u };
-      this.editing = false;
-      this.loadUsers();
-    });
+
+    if (!this.draft || !this.selectedUser) {
+      return;
+    }
+
+    this.adminService
+      .updateUser(
+        this.selectedUser.id,
+        this.draft as Partial<User>
+      )
+      .subscribe(updatedUser => {
+
+        this.selectedUser = updatedUser;
+        this.draft = { ...updatedUser };
+
+        this.editing = false;
+
+        this.snackBar.open(
+          'User updated successfully',
+          'Close',
+          { duration: 2000 }
+        );
+
+        this.loadUsers();
+      });
   }
 
   loadActivity(user: User): void {
+
     this.activity = [];
+
     this.adminService.getLogs().subscribe(logs => {
-      // naive filter: include logs that mention user's id or email or name
+
       const key = String(user.id);
-      this.activity = logs.filter(l => JSON.stringify(l).includes(key) || (user.email && JSON.stringify(l).includes(user.email)) || JSON.stringify(l).includes(user.firstName) || JSON.stringify(l).includes(user.lastName));
+
+      this.activity = logs.filter(log =>
+        JSON.stringify(log).includes(key) ||
+        (user.email &&
+          JSON.stringify(log).includes(user.email)) ||
+        JSON.stringify(log).includes(user.firstName) ||
+        JSON.stringify(log).includes(user.lastName)
+      );
     });
   }
 
-  onPageChange(event: { pageIndex: number; pageSize: number }): void {
+  onPageChange(event: any): void {
     this.pageIndex = event.pageIndex;
     this.pageSize = event.pageSize;
   }
+
 }

@@ -56,11 +56,17 @@ public List<UserDto> getAllUsers() {
 }
 
     @Transactional(readOnly = true)
-    public UserDto getUserById(Long userId) {
-        return userRepository.findById(userId)
-                .map(DtoMapper::toUserDto)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-    }
+public UserDto getUserById(Long userId) {
+
+    User user = userRepository.findById(userId)
+            .orElseThrow(() ->
+                    new ResourceNotFoundException("User not found"));
+
+    // Force initialize lazy collections
+    user.getUserSkills().size();
+
+    return DtoMapper.toUserDto(user);
+}
 
     @Transactional
     public void disableUser(Long userId, String reason) {
